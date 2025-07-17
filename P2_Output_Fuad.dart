@@ -17,10 +17,26 @@ import 'dart:io';
                     Округленное: 3  
 */
 void main(List<String> args) {
-  Fuad();
+  Krugloe();
 }
 
 void Fuad() {
   String? input = stdin.readLineSync();
-  print('Негр');
+  print('негр');
+}
+
+void Krugloe() {
+  String? input = stdin.readLineSync();
+  if (input == null) {
+    print('No input was provided');
+    return;
+  }
+
+  double? integral = double.tryParse(input);
+  if (integral == null) {
+    print('invalid number');
+    return;
+  }
+  int number = integral.round();
+  print(number);
 }
