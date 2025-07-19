@@ -16,9 +16,6 @@ import 'dart:io';
                     Введите число: 3.14  
                     Округленное: 3  
 */
-void main(List<String> args) {
-  Krugloe();
-}
 
 void Fuad() {
   String? input = stdin.readLineSync();
