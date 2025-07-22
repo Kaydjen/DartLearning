@@ -1,14 +1,5 @@
-import 'dart:math';
-import 'dart:io';
+import 'Loops.dart';
 
 void main() {
-  final random = Random();
-  bool a = random.nextBool();
-  if (!a) {
-    print('You are gay');
-  } else {
-    print('You are straight');
-  }
-  String? asd = stdin.readLineSync();
-  main();
+  Loops.loop1();
 }
