@@ -1,10 +1,10 @@
-import 'MainMenu.dart';
-import 'WelcomeMenu.dart';
+import 'menu_system/Menu.dart';
+import 'menu_system/WelcomeMenu.dart';
 import 'sys/Console.dart';
 void main() {
     Console.setConsoleSize(31, 75);
     WelcomeMenu.showWelcomeMessage();
-    MainMenu.run();
+    Menu.runMenu(menuTypes.main);
 }
 
 

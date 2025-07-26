@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import '../MainMenu.dart';
+import '../menu_system/Menu.dart';
+
 
 class Statements {
     static void runOddEven() {
@@ -22,7 +23,7 @@ class Statements {
                 print("Your number is odd");
             doReturn = false;
         }
-        MainMenu.runWithDelay();
+        Menu.runMenuWithDelay(menuTypes.secondary, 2000);
     }
     static void run() {
         stdout.writeln("Please, enter your value");
@@ -36,6 +37,6 @@ class Statements {
         if(true){
             print("XUI");
         }
-        MainMenu.runWithDelay();
+        Menu.runMenuWithDelay(menuTypes.secondary, 2000);
     }
 }

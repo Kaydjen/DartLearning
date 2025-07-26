@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import '../MainMenu.dart';
+import '../menu_system/Menu.dart';
 
 class OutputNegr {
     static void runNegra() {
@@ -8,7 +7,8 @@ class OutputNegr {
       String? input = stdin.readLineSync();
       print("Нигер");
       if (input == "") return; // just made it so vs code won't give me warning
-      MainMenu.runWithDelay();
+
+      Menu.runMenuWithDelay(menuTypes.secondary, 2000);
     }
     List<String> a = List.filled(2, "");
     static void run() {
@@ -19,7 +19,7 @@ class OutputNegr {
           print("Your rounded value is = ${input.round()}");
         else
           print("You are invalid - you entered the wrong value");
-
-        MainMenu.runWithDelay();
+     
+        Menu.runMenuWithDelay(menuTypes.secondary, 2000);
     }
 }

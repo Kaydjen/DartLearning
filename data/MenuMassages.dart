@@ -1,11 +1,29 @@
-import 'dart:io';
 import '../P2/OutputNegr.dart';
-import '../MainMenu.dart';
+import '../menu_system/Menu.dart';
 import '../P2/Statements.dart';
-import '../WelcomeMenu.dart';
+import '../menu_system/WelcomeMenu.dart';
+import 'VisualTextElements.dart';
 
 class MenuMessages {
-  static Map<int, ChoosableOptions> firstMenuOptions = {
+  static final Map<int, ChoosableOptions> firstMenuOptions = {
+    0: ChoosableOptions
+    ("This is the way", 
+    _thisIsTheWay
+    ),
+    1: ChoosableOptions
+    ("Run old scripts", 
+    () => Menu.runMenu(menuTypes.secondary)
+    ),
+    2: ChoosableOptions
+    ("Run TODO (Not implimented yet)", 
+    () => Menu.runMenu(menuTypes.secondary)
+    ),
+    666: ChoosableOptions
+    ("Show the welcome-menu again", 
+    WelcomeMenu.showWelcomeMessageAgain
+    ),
+  };
+  static final Map<int, ChoosableOptions> secondMenuOptions = {
     0: ChoosableOptions
     ("This is the way", 
     _thisIsTheWay
@@ -22,21 +40,23 @@ class MenuMessages {
     ("Run Statements.runOddEven", 
     Statements.runOddEven
     ),
-    666: ChoosableOptions
-    ("Show the welcome-menu again", 
-    WelcomeMenu.showWelcomeMessageAgain
+    4: ChoosableOptions
+    ("Show penis", 
+    _showPenis
     ),
-  };
-
+};
   static void _thisIsTheWay(){
     print("This is the way");
-    sleep(Duration(seconds: 1));
-    MainMenu.run();
+    Menu.runMenuWithDelay(menuTypes.main);
+  }
+  static void _showPenis(){
+    print(VisualTextElements.penis);
+    Menu.runMenuWithDelay(menuTypes.main, 1500);
   }
 }
 
 class ChoosableOptions {
-  String description = "";
-  void Function()? onSelected;
-  ChoosableOptions(this.description, this.onSelected);
+    final String description;
+    final void Function()? onSelected;
+    ChoosableOptions(this.description, this.onSelected);
 }
