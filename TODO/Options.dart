@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'ListString.dart';
 import 'Options.dart';
 
 class Options{
@@ -9,8 +8,7 @@ class Options{
         print('3.rewrite the tasks');
         print('4.remove a task');
         print('5.sort the tasks from a-z');
-        var input = stdin.readLineSync()!;
-        int input1 = int.tryParse(input)!;
+        var input1 = int.tryParse(stdin.readLineSync()!);
         if(input1 == 1)
         {
             final file = File('TODO.txt');
