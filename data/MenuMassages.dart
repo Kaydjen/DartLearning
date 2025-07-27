@@ -15,7 +15,7 @@ class MenuMessages {
     () => Menu.runMenu(menuTypes.secondary)
     ),
     2: ChoosableOptions
-    ("Run TODO (Not implimented yet)", 
+    ("Run Тo-Do (Not implimented yet)", 
     () => Menu.runMenu(menuTypes.secondary)
     ),
     666: ChoosableOptions
@@ -25,8 +25,8 @@ class MenuMessages {
   };
   static final Map<int, ChoosableOptions> secondMenuOptions = {
     0: ChoosableOptions
-    ("This is the way", 
-    _thisIsTheWay
+    ("Previous", 
+    () => Menu.runMenu(menuTypes.main)
     ),
     1: ChoosableOptions
     ("Run OutputNegr.run", 

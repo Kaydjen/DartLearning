@@ -27,7 +27,8 @@ class WelcomeMenu {
   }
 
   static void easterEgg(String? input) {
-        if (input?.compareTo("10(13)6660(13)1") == 0) {
+        if(input == null) return;
+        if (input.compareTo("10(13)6660(13)1") == 0) {
             print("1110000110100001001101101100100000010101111000000000000001");
             print('''
 No way, this can’t be real!
@@ -36,6 +37,9 @@ Long time, no see!
 How's it going? Are you all right?''');
             String? input = stdin.readLineSync();
             if(input!.isEmpty) return;
+        }
+        else if(input.compareTo("") == 0){
+            
         }
     } 
 }
