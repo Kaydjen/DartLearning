@@ -1,4 +1,5 @@
 import '../P2/OutputNegr.dart';
+import '../WordFrequency.dart';
 import '../menu_system/Menu.dart';
 import '../P2/Statements.dart';
 import '../menu_system/WelcomeMenu.dart';
@@ -41,6 +42,10 @@ class MenuMessages {
     Statements.runOddEven
     ),
     4: ChoosableOptions
+    ("Word Frequency Counter", 
+    WordFrequency.run
+    ),
+    5: ChoosableOptions
     ("Show penis", 
     _showPenis
     ),

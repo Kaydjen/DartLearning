@@ -2,7 +2,7 @@ import 'menu_system/Menu.dart';
 import 'menu_system/WelcomeMenu.dart';
 import 'sys/Console.dart';
 void main() {
-    Console.setConsoleSize(31, 75);
+    Console.setConsoleSize(Console.height, Console.width);
     WelcomeMenu.showWelcomeMessage();
     Menu.runMenu(menuTypes.main);
 }

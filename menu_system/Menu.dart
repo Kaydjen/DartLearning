@@ -18,7 +18,6 @@ class Menu {
         
         int hight = ((31 - optionsMap.length) / 2).toInt() - 3;
 
-
         int biggestLenght = 0;
         for (var el in optionsMap.keys) {
             if(el.toString().length > biggestLenght) 
@@ -70,11 +69,7 @@ class Menu {
     }
     static void invalidInput(menuTypes menu){
         Console.defColor(false);
-        stdout.write("Please, choose the right option \nRestarting");
-        for (var i = 0; i < 3; i++) {
-          stdout.write('.');
-          sleep(Duration(milliseconds: 750));
-        }
+        Console.invalidInput();
         runMenu(menu);
     }
 

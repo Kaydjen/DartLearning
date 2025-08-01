@@ -13,4 +13,17 @@ class Console{
     print('\x1B[90m');
     if(doClear) clear();
   }  
+  static void invalidInput([String errorMessage = "Please, enter proper input value ", String tipMessage = ""]){ // todo: polish of
+        stdout.write("$errorMessage \nRestarting");
+        for (var i = 0; i < 3; i++) {
+          stdout.write('.');
+          sleep(Duration(milliseconds: 750));
+        }
+  }
+  static final int height = 31;
+  static final int width = 75;
+  static void placeCursor(int row, [int column = 0]){
+    stdout.write('\x1B[${row};${column}H');
+  }
+
 }
