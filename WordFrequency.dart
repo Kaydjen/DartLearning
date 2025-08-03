@@ -11,17 +11,17 @@ Skills: Map<String, int>, splitting strings, loop logic.
  */
 
 import 'dart:io';
-
+import 'menu_system/Menu.dart';
 import 'sys/Console.dart';
 
 class WordFrequency{
     static void run(){
         Console.clear();
         Console.defColor();
-        Console.placeCursor(14);
+        Console.placeCursor((Console.height/2).toInt());
         stdin.echoMode = true; 
+        print("  Please, enter text");
 
-        print("  Please, enter text\n");
         Map<String, int> txt = Map();
         String? text = stdin.readLineSync();
         if(text == null){
@@ -40,7 +40,7 @@ class WordFrequency{
 
         stdin.echoMode = false; 
         print("\n  To return in main lobby press Enter");
-        String? input = stdin.readLineSync();
-        Console.grayColor();
+        stdin.readLineSync();
+        Menu.runMenu(menuTypes.secondary);
     }
 }
