@@ -25,7 +25,7 @@ class WordFrequency{
         Map<String, int> txt = Map();
         String? text = stdin.readLineSync();
         if(text == null){
-            Console.invalidInput("Please, enter a proper text");
+            Console.invalidInput(errorMessage: "Please, enter a proper text");
             run();
             return;
         }

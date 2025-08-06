@@ -1,16 +1,47 @@
-import 'menu_system/Menu.dart';
-import 'menu_system/WelcomeMenu.dart';
+import 'Cart.dart';
+//import 'menu_system/Menu.dart';
+//import 'menu_system/WelcomeMenu.dart';
+import 'ShowLetters.dart';
 import 'sys/Console.dart';
 
 void main() {
     Console.setConsoleSize(Console.height, Console.width);
-    WelcomeMenu.showWelcomeMessage();
-    Menu.runMenu(menuTypes.main);
+    
+    //ShowLetters.run(8, 2147483646);
+    CartUI.showAllCarts();
+    print("");
+    Cart.addNewCart("New Cart", {"Invalid": 1});
+    CartUI.showAllCarts();
+    print("");
+    Cart.tryAddProducts("New Cart", {"Invalid":1 });
+    CartUI.showAllCarts();
+    print("");
+    print("");
+    Cart.mergeCarts(
+        "Cart Kaydjen", 
+        "Cart Fuad",
+        "Our Cart",
+        doRemovePreviousCarts: false);
+    CartUI.showAllCarts();
+
+    print("");
+    Cart.compare("Cart Kaydjen", "Our Cart");
+    CartUI.createCart();
+    CartUI.showAllCarts();
+
+    // WelcomeMenu.showWelcomeMessage();
+    // Menu.runMenu(menuTypes.main);
 }
 
+/* 
+- Cart with name [name] was added;
+- Products [products] were added to cart [cart name];
+- Cart [name] and cart [name] were merged:
+    added: ...
+    removed: ...
+    changed: ...
 
-
-
+ */
 
 
    // Console.setConsoleSize(Console.height, Console.width);

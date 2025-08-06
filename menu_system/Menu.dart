@@ -16,7 +16,7 @@ class Menu {
         Console.clear();
         Map<int, ChoosableOptions> optionsMap = _validateMenu(menu);
         
-        int hight = ((31 - optionsMap.length) / 2).toInt() - 3;
+        int hight = ((Console.height - optionsMap.length) / 2).toInt() - 3;
 
         int biggestLenght = 0;
         for (var el in optionsMap.keys) {
@@ -36,13 +36,13 @@ class Menu {
         int width = 0;
         optionsMap.forEach((key, value) 
             => width += value.description.length + averageWidth + biggestLenght - key.toString().length + 3);
-        width = ((75 - (width / optionsMap.length))/2).toInt();
+        width = ((Console.width - (width / optionsMap.length))/2).toInt();
         
         print('${'\n' * hight}');
 
         for (var el in optionsMap.keys) 
         {
-            print("${' ' * width}\x1B[91m[${el}]${' ' 
+            print("${' ' * width}\x1B[91m${el}${' ' 
             * (biggestLenght - el.toString().length)} - ${' ' * averageWidth}\x1B[90m${optionsMap[el]!.description}");   
             /* 
             print('\n${' ' * ((74 - el.toString().length) / 2).toInt()}${el}');
