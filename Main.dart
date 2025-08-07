@@ -6,10 +6,11 @@
 // import 'WordCounter.dart';
 // import 'LetterCounter.dart';
 // import 'GroupByFirstLetter.dart';
-import 'MiniProjects/ShowLetters.dart';
+//import 'MiniProjects/ShowLetters.dart';
+import 'Cart/MergeShopCart.dart';
 
 void main() { //STATIC void main();
-    ShowLetters.show();
+    MergeShopCart.merge();
 }
 
 
