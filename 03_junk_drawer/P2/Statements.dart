@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../menu_system/Menu.dart';
+import '../../00_hub_core/menu_system/Menu.dart';
 
 
 class Statements {
@@ -23,7 +23,7 @@ class Statements {
                 print("Your number is odd");
             doReturn = false;
         }
-        Menu.runMenuWithDelay(menuTypes.secondary, 2000);
+        Menu.runMenuWithDelay(menuTypes.junk_drawer, 2000);
     }
     static void run() {
         stdout.writeln("Please, enter your value");
@@ -37,6 +37,6 @@ class Statements {
         if(true){
             print("XUI");
         }
-        Menu.runMenuWithDelay(menuTypes.secondary, 2000);
+        Menu.runMenuWithDelay(menuTypes.junk_drawer, 2000);
     }
 }

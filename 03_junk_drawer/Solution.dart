@@ -1,5 +1,5 @@
 
-class Solution {
+class SolutionLeetCode1 {
   // In LeetCode the HashMap is not fully implemented
   // Runtime 503
   List<int> twoSum(List<int> nums, int target) {

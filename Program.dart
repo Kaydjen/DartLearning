@@ -1,15 +1,11 @@
-import 'Cart.dart';
-//import 'menu_system/Menu.dart';
-//import 'menu_system/WelcomeMenu.dart';
-import 'ShowLetters.dart';
-import 'sys/Console.dart';
+import '00_hub_core/menu_system/Menu.dart';
+import '00_hub_core/menu_system/WelcomeMenu.dart';
+import '01_sys/Console.dart';
 
 void main() {
     Console.setConsoleSize(Console.height, Console.width);
-
-    CartUI.mainMenu();
-    // WelcomeMenu.showWelcomeMessage();
-    // Menu.runMenu(menuTypes.main);
+    WelcomeMenu.showWelcomeMessage();
+    Menu.runMenu(menuTypes.main);
 }
 
 /* 

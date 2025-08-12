@@ -11,8 +11,8 @@ Skills: Map<String, int>, splitting strings, loop logic.
  */
 
 import 'dart:io';
-import 'menu_system/Menu.dart';
-import 'sys/Console.dart';
+import '../00_hub_core/menu_system/Menu.dart';
+import '../01_sys/Console.dart';
 
 class WordFrequency{
     static void run(){
@@ -41,6 +41,6 @@ class WordFrequency{
         stdin.echoMode = false; 
         print("\n  To return in main lobby press Enter");
         stdin.readLineSync();
-        Menu.runMenu(menuTypes.secondary);
+        Menu.runMenu(menuTypes.junk_drawer);
     }
 }
