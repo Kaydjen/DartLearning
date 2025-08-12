@@ -6,29 +6,8 @@ import 'sys/Console.dart';
 
 void main() {
     Console.setConsoleSize(Console.height, Console.width);
-    
-    //ShowLetters.run(8, 2147483646);
-    CartUI.showAllCarts();
-    print("");
-    Cart.addNewCart("New Cart", {"Invalid": 1});
-    CartUI.showAllCarts();
-    print("");
-    Cart.tryAddProducts("New Cart", {"Invalid":1 });
-    CartUI.showAllCarts();
-    print("");
-    print("");
-    Cart.mergeCarts(
-        "Cart Kaydjen", 
-        "Cart Fuad",
-        "Our Cart",
-        doRemovePreviousCarts: false);
-    CartUI.showAllCarts();
 
-    print("");
-    Cart.compare("Cart Kaydjen", "Our Cart");
-    CartUI.createCart();
-    CartUI.showAllCarts();
-
+    CartUI.mainMenu();
     // WelcomeMenu.showWelcomeMessage();
     // Menu.runMenu(menuTypes.main);
 }

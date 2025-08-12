@@ -14,8 +14,5 @@ class ShowLetters {
             if(letters.contains('fujitoit')) break;
         }
         print("HERE IT IS ${counter} - ${letters}");
-        // for (var element in letters) {
-        //   print(element);
-        // }
     }
 }

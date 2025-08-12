@@ -15,7 +15,13 @@ class Console{
         print('\x1B[90m');
         if(doClear) clear();
     }  
-    static void invalidInput({String errorMessage = "Please, enter proper input value ", String tipMessage = "",  int countOfLinesToClear = 1}){ // todo: polish of
+    static String colorDefText() => "\u001b[38;5;255m";
+    static String colorAdditTextReddish() => "\u001b[38;5;204m";
+    static String colorDefInput() => "\u001b[38;5;196m";
+    static String colorAdditInputWhitish() => "\u001b[38;5;252m";
+    static String symbolColorDef(String symbol) => "${Console.colorDefInput()}$symbol${Console.colorDefText()}";
+    static String symbolColorAddit(String symbol) => "${Console.colorAdditInputWhitish()}$symbol${Console.colorDefText()}";
+    static void invalidInput({String errorMessage = "Please, enter proper input value ", String tipMessage = "",  int countOfLinesToClear = 3}){ // todo: polish of
           stdout.write("$errorMessage \nRestarting");
           for (var i = 0; i < 3; i++) {
               stdout.write('.');
@@ -31,11 +37,14 @@ class Console{
     
 
     static void clearPreviousLines(int count) {
-        for (int i = 0; i < count; i++) {
-            // Очистить строку
-            stdout.write('\x1B[2K');
+        stdout.write('\x1B[2K');
+        for (int i = 0; i < count-1; i++) {
             // Переместиться на строку вверх
             stdout.write('\x1B[1A');
+            // Переместить курсор в начало строки
+            stdout.write('\x1B[0G');
+            // Очистить строку
+            stdout.write('\x1B[2K');
         }
     }
 
