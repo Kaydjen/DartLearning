@@ -1,5 +1,6 @@
 import '../../02_big_complited_projects/Cart.dart';
 import '../../03_junk_drawer/P2/OutputNegr.dart';
+import '../../03_junk_drawer/ShowLetters.dart';
 import '../../03_junk_drawer/WordFrequency.dart';
 import '../menu_system/Menu.dart';
 import '../../03_junk_drawer/P2/Statements.dart';
@@ -47,6 +48,10 @@ class MenuMessages {
         WordFrequency.run
         ),
         5: ChoosableOptions
+        ("Luck Of The Draw - Word Hunter", 
+        WordHunterRundomDraw.run
+        ),
+        6: ChoosableOptions
         ("Show penis", 
         _showPenis
         ),

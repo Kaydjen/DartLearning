@@ -48,4 +48,28 @@ class Console{
         }
     }
 
+static String promptValidate(String message, {int countOfLinesToClear = 3}){
+        while (true) {
+            String? input = _prompt(message);
+            if (input != null && input.trim().isNotEmpty) return input;            
+            Console.invalidInput(countOfLinesToClear: countOfLinesToClear);
+        }
+    }
+    static int promptValidateInt(String message, {int countOfLinesToClear = 3}){
+        while (true) {
+            final input = _prompt(message);
+            if (input != null && input.trim().isNotEmpty) {
+                final option = int.tryParse(input);
+                if(option != null) return option;
+            }           
+            Console.invalidInput(countOfLinesToClear: countOfLinesToClear);
+        }
+    }
+    static String? _prompt(String message) {
+        stdout.write(message);
+        stdout.write("\u001b[38;5;196m");
+        final input = stdin.readLineSync()?.trim();
+        stdout.write("\u001b[38;5;255m");
+        return input;
+    }
 }
