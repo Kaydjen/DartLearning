@@ -7,7 +7,7 @@ class MergeShopCart {
 };
     
     static void merge() {
-        print('Choose an option for your next move' '\n1,2');
+        print('Choose an option for your next move' '\n1,2,3,4,5');
         String? a = stdin.readLineSync();
         if(a == null){
             merge();
@@ -18,7 +18,9 @@ class MergeShopCart {
             merge();
             return;
         }
-        if(b == 1) option_1();
+        if(b == 1) adding();
+        else if(b == 2) removing();
+        else if(b == 3) seeing();
         else print('Have a good day');
         sleep(Duration(seconds: 2));
         print("\x1B[2J\x1B[0;0H");
@@ -29,12 +31,12 @@ class MergeShopCart {
         }
         else return;
     }
-    static void option_1(){
+    static void adding(){
         print('You can add a cart here');
         print('Plase, write a name after the word Cart');
         String? d = stdin.readLineSync();
         if (d == null){
-            option_1();
+            adding();
             return;
         }
         d = 'Cart' + d;
@@ -44,13 +46,61 @@ class MergeShopCart {
             print("\x1B[2J\x1B[0;0H");
             stdout.write('\x1B[1A'); 
             stdout.write('\x1B[0G');
-            option_1();
+            adding();
             return;
         }
         Carts[d] = Map();
         print(Carts);
 
     }
+
+        static void removing(){
+            print('You can remove a cart here');
+            print('Please, write the name of the cart(beside the word Cart itself)');
+            String? d = stdin.readLineSync();
+            if(d == null) {
+                removing();
+                return;
+            }
+            d = 'Cart' + d;
+            if(Carts.containsKey(d)){
+                Carts.remove(d);
+                print('The cart has been deleted succesfully');
+            }
+            else{
+                print('There is no such a cart, please retry');
+                sleep(Duration(seconds: 1));
+                print("\x1B[2J\x1B[0;0H");
+                stdout.write('\x1B[1A'); 
+                stdout.write('\x1B[0G');
+                removing();
+                return;
+            }
+        }
+
+        static void seeing(){
+            print('Here you can see the specific cart');
+            print('Write the name of the Cart(beside the word Cart itself)');
+            String? d = stdin.readLineSync();
+            if(d == null) {
+                seeing();
+                return;
+            }
+            d = 'Cart' + d;
+            if(Carts.containsKey(d)){
+                if(Carts[d]!.isEmpty) print('There is nothing in this cart');
+                else print(Carts[d]);
+            }
+            else {
+                print('Something went wrong, please, try one more time!');
+                sleep(Duration(seconds: 1));
+                print("\x1B[2J\x1B[0;0H");
+                stdout.write('\x1B[1A'); 
+                stdout.write('\x1B[0G');
+                seeing();
+                return;
+            }
+        }
 
         static String again(){
         stdout.write('\x1B[1A');
