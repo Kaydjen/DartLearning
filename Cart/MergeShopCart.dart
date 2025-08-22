@@ -21,6 +21,7 @@ class MergeShopCart {
         if(b == 1) adding();
         else if(b == 2) removing();
         else if(b == 3) seeing();
+        else if(b == 4) addingPorducts();
         else print('Have a good day');
         sleep(Duration(seconds: 2));
         print("\x1B[2J\x1B[0;0H");
@@ -116,6 +117,29 @@ class MergeShopCart {
         stdout.write('\x1B[1A'); 
         stdout.write('\x1B[0G');
         return c;
+        }
+
+        static void addingPorducts(){
+            print("Please, introduce the name of the cart you want to edit(beside the word Cart)");
+             String? d = stdin.readLineSync();
+            if(d == null) {
+                addingPorducts();
+                return;
+            }
+            d = 'Cart' + d;
+            if(Carts.containsKey(d)){
+                print('Introduce the product');
+                String e = stdin.readLineSync()!;
+                if(e == null) addingPorducts();
+                print('Introduce the quantity of the product');
+                int x = int.tryParse(stdin.readLineSync()!)!;
+                if(x == null) addingPorducts();
+                Carts[d]?[e] = x;
+            }
+            else {
+                print('Please, try again');
+                addingPorducts();
+            }
         }
 }
 
