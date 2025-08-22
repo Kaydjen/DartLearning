@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import '../00_hub_core/data/MenuMassages.dart';
+
 class Console{
     static void setConsoleSize(int height, int width) {
         // ANSI escape code to set terminal size (works in most Unix-like terminals)
@@ -47,25 +49,43 @@ class Console{
             stdout.write('\x1B[2K');
         }
     }
-
-static String promptValidate(String message, {int countOfLinesToClear = 3}){
+    static void displayOptionsAndHandleChoice(Map<int, ChoosableOptions> options){
+        Console.clear();
+        String? message = "\nEnter option: ";
+        for (var optionDescription in options.entries) 
+        print("\u001b[38;5;196m${optionDescription.key}.\u001b[38;5;255m ${optionDescription.value.description}");
+        //Console.defColor();
+        while(true){
+            final key = promptValidateIntDouble(message, countOfLinesToClear: 3).toInt();
+            if(options.containsKey(key)) {
+                options[key]!.onSelected!.call();            
+                break;
+            }
+        }
+    }
+    static String promptValidate(String message, {int countOfLinesToClear = 3}){
         while (true) {
-            String? input = _prompt(message);
+            String? input = prompt(message);
             if (input != null && input.trim().isNotEmpty) return input;            
             Console.invalidInput(countOfLinesToClear: countOfLinesToClear);
         }
     }
-    static int promptValidateInt(String message, {int countOfLinesToClear = 3}){
+    static double promptValidateIntDouble(String message, {int countOfLinesToClear = 3, Function(String) onStringCheck = _func}){
         while (true) {
-            final input = _prompt(message);
+            final input = prompt(message);
             if (input != null && input.trim().isNotEmpty) {
-                final option = int.tryParse(input);
+                onStringCheck(input);
+                final option = double.tryParse(input);
                 if(option != null) return option;
             }           
             Console.invalidInput(countOfLinesToClear: countOfLinesToClear);
         }
     }
-    static String? _prompt(String message) {
+
+    static void _func(String input){
+        
+    }
+    static String? prompt(String message) {
         stdout.write(message);
         stdout.write("\u001b[38;5;196m");
         final input = stdin.readLineSync()?.trim();

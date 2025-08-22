@@ -1,7 +1,226 @@
+import 'dart:convert';
+import 'dart:io';
+
+import '00_hub_core/data/MenuMassages.dart';
+import '00_hub_core/menu_system/Menu.dart';
+import '01_sys/Console.dart';
+import 'Flashcard.dart';
+
 class SM2 {
+    static List<Flashcard> _data = [
+        Flashcard(question: "Choto normalnoe?", 
+            answer: "Nu po idei da", 
+            repetitions: 1, 
+            interval: 2,
+            easeFactor:  3,
+            nextReviewDate: DateTime.now()
+            ),
+        Flashcard(question: "tun tun tun?", 
+            answer: "SAHUR", 
+            repetitions: 2, 
+            interval: 1,
+            easeFactor:  0,
+            nextReviewDate: DateTime.now()
+            )
+    ];
+    static List<Flashcard> _dueDate = [];
+    static List<Flashcard> get data => _data;
+    static Flashcard? getClosestReviewCard(){
+        if(!collectDueCards()) {
+            //print("There is nothing to repeat today");
+            return null;
+        }
+        return _dueDate.removeLast();
+    }
+    /// true - there are cards to repeat today
+    /// false - there are no cards to repeat today
+    static bool collectDueCards(){
+        if(_dueDate.length > 0) {
+            //print("The _dueDate is already filled for today");
+            return true;
+        }
+        _dueDate.clear();
+        for (var card in _data) {
+            if(card.nextReviewDate.day == DateTime.now().day){
+                _dueDate.add(card);
+            }
+        }
+
+        if(_dueDate.isEmpty) return false;
+        else return true;
+    }
+    static void addCard(Flashcard card) => _data.add(card);
+    static void saveAllCards(){
+        final file = File('data.json');
+        if(!file.existsSync()) return;
+        file.writeAsStringSync("[]");
+        String json = jsonEncode( SM2.data,
+        toEncodable: (Object? value) => value is Flashcard
+            ? Flashcard.toJson(value)
+            : throw UnsupportedError('Cannot convert to JSON: $value'));
+
+        file.writeAsString(json);
+    }
+    static void getAllCardsFromSave(){
+        final file = File('data.json').readAsStringSync();
+        final json = jsonDecode( file) as List;
+        _data.clear();
+        for (var element in json) 
+            _data.add(Flashcard.fromJson(element as Map<String, dynamic>));
+
+        //final aaaaa = json.forEach((card) => Flashcard.fromJson(card));
+        //print(aaaaa);
+    }   
+}
+
+class SM2UI{
+    static Map<int, ChoosableOptions> options = {
+        0: ChoosableOptions(
+            "Go back to main menu",
+            () => Menu.runMenu(menuTypes.main)
+        ),
+        1: ChoosableOptions(
+            "Start flashcard session",
+            startFlashcardSession
+        ),
+        2: ChoosableOptions(
+            "Add flashcard",
+            addNewFlashcard
+        ),
+        3: ChoosableOptions(
+            "Save all flashcards",
+            saveAllFlashcards
+        ),
+        4: ChoosableOptions(
+            "Show all flashcards",
+            showAllCards
+        ),
+    };
+    static bool isFirstStart = false;
+    static void mainMenu() {
+       // SM2.saveAllCards();
+        if(!isFirstStart) {
+            SM2.getAllCardsFromSave();
+            isFirstStart = true;
+        } 
+        Console.displayOptionsAndHandleChoice(options);
+    }
+    static void startFlashcardSession(){
+        while(true){
+            final card = SM2.getClosestReviewCard();
+            if(card == null){
+                print("There is nothing to review today");
+                return;
+            }
+            print(card.question);
+            final quolity = Console.promptValidateIntDouble("Enter your update review quality", 
+            onStringCheck: (input) {
+                if(input.contains("*")){
+                    _backToMenu();
+                    return;
+                }
+            }).toInt();      
+            card.updateReview(quolity);
+        }
+    }
+    static void addNewFlashcard(){
+        Console.clear(); 
+        // todo: make something better here, like ability to cancel creating or restart
+        final question = Console.promptValidate("Question: ");
+        final answer = Console.promptValidate("Answer: ");
+        SM2.addCard(Flashcard(question: question, answer: answer, repetitions: 0, interval: 0, easeFactor: 0, nextReviewDate: DateTime.now()));
+        _backToMenu();
+    }
+    static void saveAllFlashcards(){
+          print("Saving");
+          SM2.saveAllCards();
+          for (var i = 0; i < 3; i++) {
+              stdout.write('.');
+              sleep(Duration(milliseconds: 750));
+          }
+    }
+    static void showAllCards(){
+        if(SM2.data.isEmpty) {
+            Console.invalidInput(errorMessage: "There is no flashcards.");
+            return;
+        }
+        Console.clear();
+        for (var card in SM2.data) {
+            print(""
+            "\n${Console.symbolColorDef("Answer")}: ${Console.symbolColorAddit(card.answer)} "
+            "\n${Console.symbolColorDef("Question")}: ${Console.symbolColorAddit(card.question)}"
+            "\n${Console.symbolColorDef("Interval")}: ${Console.symbolColorAddit(card.interval.toString())}"
+            "\n${Console.symbolColorDef("EaseFactor")}: ${Console.symbolColorAddit(card.easeFactor.toString())}"
+            "\n${Console.symbolColorDef("NextReviewDate")}: ${Console.symbolColorAddit(card.nextReviewDate.toString())} \n");
+        }
+        _backToMenu();
+    }
+    static void _backToMenu(){
+        Console.prompt("\n\u001b[38;5;252mPress ${Console.symbolColorDef("Enter")} to go to main menu: ");
+        mainMenu();
+    }
+}
+
+
+
+/* 
+
+
+
+"[
+    {
+        \"question\":\"Choto normalnoe?\",
+        \"answer\":\"Nu po idei da\",
+        \"repetitions\":1,
+        \"interval\":2.0,
+        \"easeFactor\":3.0,
+        \"nextReviewDate\":\"2025-08-22 00:20:47.162519\"
+    },
+
+    {
+        \"question\":\"tun tun tun?\",
+        \"answer\":\"SAHUR\",
+        \"repetitions\":2,
+        \"interval\":1.0,
+        \"easeFactor\":0.0,
+        \"nextReviewDate\":\"2025-08-22 00:20:47.164640\"
+    },
+
+    {
+        \"question\":\"Nu da\",
+        \"answer\":\"nu nie\",
+        \"repetitions\":0,
+        \"interval\":0.0,
+        \"easeFactor\":0.0,
+        \"nextReviewDate\":\"2025-08-22 00:20:59.953171\"
+    }
+]"
+
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // 1. Создал файл и класс. Пока что название оставлю как SM2, в честь названия алгоритма, и не буду сильно парится над ним
     // Пока что не уверен, что точно будет в этом классе: чисто логика, или и логика и интерфейс. Время покажет
-    //2. Смотрю на второй шаг. Этот весь список - это просто переменные. Мне нужно будет их использовать для каждого слова. 
+    // 2. Смотрю на второй шаг. Этот весь список - это просто переменные. Мне нужно будет их использовать для каждого слова. 
     // Так можно сделать многими способами: например использовать список и встроенный в дарт фичу - records. 
     // Эта штука позволяет сохранять, например в листе, вместо одного элемента - два и более: List<(String, String, int, int, int, int)> data = [];
     // Но данный вариант будет безумно не удобым, на мой взгляд, из-за способа обращения к елементам такого records: data.$0 - обращение к первому элементу 
@@ -11,60 +230,4 @@ class SM2 {
     /// 3. Почитал я это задание, пока что не очень ясно что и как точно нужно сделать. Предпологаю, что стоит просто сделать метод в классе Flashcard
     /// который будет обрабатывать все то, о чем сказано в третьем пункте
     /// 4. Теперь стало ясно, я думал правильно. Добавлю метод и потихоньку напишу всю логику, описанную в 3 пунтке в этом методе
-    /// 
-}
-
-class Flashcard{
-    String question = "";
-    String answer = ""; 
-    int repetitions = 0; 
-    double interval = 0;
-    double easeFactor = 2.5; // score that give player
-    DateTime nextReviewDate = DateTime(2025, 1, 1); // такой вот встроенный способ хранения даты
-    void updateReview(int quality){ // метод, как и все, что есть в классе, я сделал не статическим. Ибо этот класс - по сути переменная,
-    // как тот же лист или мап
-        // 1. When you review a card, you give it a score from 0 to 5. - значит, у нас должно быть ограничение. Можно было бы сделать его прямо тут,
-        // но пожалуй лучше вынесу такого рода логику в другой класс, пусть это будет там
-        /* 2.
-            If you score it 0–2 → you forgot or struggled
-                Reset repetitions to 0
-                Set interval to 1 (review again tomorrow)
-         */
-        if(quality >= 0 && quality <= 2){
-            repetitions = 0;
-            interval = 1;
-        }
-        /* 
-            If you score it 3–5 → you remembered it
-                Increase repetitions by 1
-                If it's the first correct review → interval = 1
-                If it's the second → interval = 6
-                If it's the third or more → interval = previous interval × easeFactor
-         */
-        else if(quality >= 3 && quality <= 5){ // строчка "quality <= 5" особо не нужна, ибо, вероятно,
-        // я пропишу ограничение на ввод оценки (что бы можно было вввести только цифру от 0 до 5)
-        // Но, как говорится, лишней безопасности не бывает, да и к томуже, так удобнее можно будет что-то поменять
-
-        repetitions++;
-        switch(repetitions){ // решил использовать свитч кейс, ибо у нас там проверяется одно число и его значения. 
-        // Для такого удобнее всего использовать именно свич кейс. Он позволяет прописать все варианты значений и действий более удобно и наглядно, удобнее читать
-            case 1:
-                interval = 1;
-                break;
-            case 2:
-                interval = 6;
-                break;
-            case >= 3: // эта запись равносильна if(repetitions >= 3)...
-                interval = interval * easeFactor; // на этом моменте я поменял тип переменной interval с int на double
-                break;
-        }
-        easeFactor = (easeFactor - 0.8 + (0.28 * quality) - (0.02 * quality * quality)).clamp(1.3, 100000); 
-        // clamp - ограничение значения. То есть значение не может стать меньше или больше указанного лимита
-        
-        /// DateTime.now() - тут хранятся данный о настоящей дате (день, год, время, месяц - в общем, обо всем).
-        /// Я обновляю старую дату, а потом увеличиваю интервал.
-        nextReviewDate = DateTime.now();
-        nextReviewDate.day + interval;
-        }
-    }
-}
+    

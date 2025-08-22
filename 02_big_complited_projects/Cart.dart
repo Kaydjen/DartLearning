@@ -218,7 +218,6 @@ class CartUI{
                 break;
             }
         }
-
     }
     static void showTips(){
         Console.clear();
@@ -1028,3 +1027,5 @@ Would you like to begin now with **Step 1: Building the cart structure and centr
        (_carts.putIfAbsent(cartName, () => productQuantities) == productQuantities);
 
  */
+
+

@@ -53,9 +53,11 @@ class Menu {
         */  
         }
 
-        stdin.echoMode = false; // Disable echoing typed characters 
+        //stdin.echoMode = false; // Disable echoing typed characters 
         stdout.write('\n${' ' * 37}');
+        stdout.write("\u001b[38;5;196m");
         int? input = int.tryParse(stdin.readLineSync()!);
+        stdout.write("\u001b[38;5;255m");
         if(optionsMap.containsKey(input))
         {
             stdin.echoMode = true; 
@@ -63,7 +65,7 @@ class Menu {
         }
         else invalidInput(menu);
 
-        stdin.echoMode = true; 
+        //stdin.echoMode = true; 
     }
     static void runMenuWithDelay(menuTypes menu, [int delay = 1000]){
         sleep(Duration(milliseconds: delay));

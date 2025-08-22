@@ -1,7 +1,8 @@
 import '../../02_big_complited_projects/Cart.dart';
 import '../../03_junk_drawer/P2/OutputNegr.dart';
-import '../../03_junk_drawer/ShowLetters.dart';
+import '../../03_junk_drawer/WordHunterRundomDraw.dart';
 import '../../03_junk_drawer/WordFrequency.dart';
+import '../../SM2.dart';
 import '../menu_system/Menu.dart';
 import '../../03_junk_drawer/P2/Statements.dart';
 import '../menu_system/WelcomeMenu.dart';
@@ -64,6 +65,10 @@ class MenuMessages {
         1: ChoosableOptions
         ("Run Cart", 
         CartUI.mainMenu
+        ),
+        2: ChoosableOptions
+        ("Run SM2", 
+        SM2UI.mainMenu
         ),
     };
   

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import '../01_sys/Console.dart';
@@ -6,13 +7,15 @@ class WordHunterRundomDraw {
     static void run(){
         Console.clear();
         Console.defColor();
-        final length = Console.promptValidateInt("Quantity of letters in word: ", countOfLinesToClear: 3);
-        final word = Console.promptValidate("Word to search for: ", countOfLinesToClear: 3);
-        final doShowWord = Console.promptValidate(
+        final length = Console.promptValidateIntDouble("Quantity of letters in word: ", countOfLinesToClear: 3).toInt();
+        print("${Console.symbolColorDef("Attention!!!")} if you'll write symbols apart from letters - program won't find it. ONLY LETTERS");
+        final word = Console.promptValidate("Word to search for: ", countOfLinesToClear: 3).toLowerCase();
+        print(
             "See each word: ${Console.symbolColorDef("enter something")} "
             "\nSee only resault: ${Console.symbolColorDef("press enter on empty line")}"
-            "\nChoose the option: ", 
-            countOfLinesToClear: 5).isEmpty ? false : true;
+            "\nChoose the option: ");
+        final input = stdin.readLineSync();
+        final doShowWord = input == null || input.isEmpty ? false : true;
         Random rnd = Random();
         int counter = 0;
         int maxCounter = 0;

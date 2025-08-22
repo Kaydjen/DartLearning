@@ -30,7 +30,8 @@ class LeaderboardSystem{
     /// Return list of top n users
     /// 
     /// n - number of users
-    static List<MapEntry<String, int>> returnTopNUsers(int n) => MapInvertor.sort(_data, false).toList();
+    static List<MapEntry<String, int>> returnTopNUsers(int n) 
+    => MapInvertor.sort(_data, false).toList() as List<MapEntry<String, int>>;
     /// sort users by score descending
     static void sort() => MapInvertor.sort(_data);
 }

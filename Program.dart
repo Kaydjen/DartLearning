@@ -5,8 +5,9 @@ import '01_sys/Console.dart';
 void main() {
     Console.setConsoleSize(Console.height, Console.width);
     WelcomeMenu.showWelcomeMessage();
-    Menu.runMenu(menuTypes.main);
+    Menu.runMenu(menuTypes.main);  
 }
+
 
 /* 
 - Cart with name [name] was added;
