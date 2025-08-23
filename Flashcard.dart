@@ -3,9 +3,9 @@ class Flashcard{
     String question = "";
     String answer = ""; 
     int repetitions = 0; 
-    double interval = 0;
+    int interval = 0;
     double easeFactor = 2.5; // score that give player
-    DateTime nextReviewDate = DateTime(2025, 1, 1); // такой вот встроенный способ хранения даты
+    DateTime nextReviewDate = DateTime(2025, 1, 1);                               // такой вот встроенный способ хранения даты
     Flashcard({required this.question, required this.answer, 
     required this.repetitions, required this.interval, 
     required this.easeFactor, required this.nextReviewDate});
@@ -14,7 +14,7 @@ class Flashcard{
         : question = json["question"] as String,
         answer = json["answer"] as String,
         repetitions = json["repetitions"] as int,
-        interval = json["interval"] as double,
+        interval = json["interval"] as int,
         easeFactor = json["easeFactor"] as double,
         nextReviewDate = DateTime.parse(json["nextReviewDate"] as String);
         
@@ -29,8 +29,36 @@ class Flashcard{
         'nextReviewDate': card.nextReviewDate.toString(), 
       };
 
+    void updateReview(int quality) {
+        // ограничиваем оценку
+        quality = quality.clamp(0, 5).toInt();
+
+        if (quality <= 2) {
+            // плохой результат
+            repetitions = 0;
+            interval = 1;
+        } else {
+            // хороший результат
+            repetitions++;
+            if (repetitions == 1) {
+                interval = 1;
+            } else if (repetitions == 2) {
+                interval = 6;
+            } else {
+                interval = (interval * easeFactor).round();
+            }
+
+            easeFactor = (easeFactor - 0.8 + (0.28 * quality) - (0.02 * quality * quality))
+                .clamp(1.3, double.infinity);
+        }
+
+        // дата следующего повторения
+        nextReviewDate = DateTime.now().add(Duration(days: interval));
+    }
+/* 
     void updateReview(int quality){ // метод, как и все, что есть в классе, я сделал не статическим. Ибо этот класс - по сути переменная,
     // как тот же лист или мап
+        quality = quality.clamp(0, 5).toInt();
         // 1. When you review a card, you give it a score from 0 to 5. - значит, у нас должно быть ограничение. Можно было бы сделать его прямо тут,
         // но пожалуй лучше вынесу такого рода логику в другой класс, пусть это будет там
         /* 2.
@@ -74,7 +102,7 @@ class Flashcard{
         nextReviewDate = DateTime.now();
         nextReviewDate.day + interval;
         }
-    }
+    } */
 }
 
 

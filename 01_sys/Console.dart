@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import '../00_hub_core/data/MenuMassages.dart';
@@ -63,10 +64,13 @@ class Console{
             }
         }
     }
-    static String promptValidate(String message, {int countOfLinesToClear = 3}){
+    static String promptValidate(String message, {int countOfLinesToClear = 3, Function(String) onStringCheck = _func}){
         while (true) {
             String? input = prompt(message);
-            if (input != null && input.trim().isNotEmpty) return input;            
+            if (input != null && input.trim().isNotEmpty) {
+                onStringCheck(input);
+                return input;
+            }            
             Console.invalidInput(countOfLinesToClear: countOfLinesToClear);
         }
     }
@@ -88,7 +92,7 @@ class Console{
     static String? prompt(String message) {
         stdout.write(message);
         stdout.write("\u001b[38;5;196m");
-        final input = stdin.readLineSync()?.trim();
+        final input = stdin.readLineSync(encoding: utf8)?.trim();
         stdout.write("\u001b[38;5;255m");
         return input;
     }

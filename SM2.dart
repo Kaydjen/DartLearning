@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import '00_hub_core/data/MenuMassages.dart';
 import '00_hub_core/menu_system/Menu.dart';
@@ -7,22 +8,7 @@ import '01_sys/Console.dart';
 import 'Flashcard.dart';
 
 class SM2 {
-    static List<Flashcard> _data = [
-        Flashcard(question: "Choto normalnoe?", 
-            answer: "Nu po idei da", 
-            repetitions: 1, 
-            interval: 2,
-            easeFactor:  3,
-            nextReviewDate: DateTime.now()
-            ),
-        Flashcard(question: "tun tun tun?", 
-            answer: "SAHUR", 
-            repetitions: 2, 
-            interval: 1,
-            easeFactor:  0,
-            nextReviewDate: DateTime.now()
-            )
-    ];
+    static List<Flashcard> _data = [];
     static List<Flashcard> _dueDate = [];
     static List<Flashcard> get data => _data;
     static Flashcard? getClosestReviewCard(){
@@ -30,7 +16,8 @@ class SM2 {
             //print("There is nothing to repeat today");
             return null;
         }
-        return _dueDate.removeLast();
+        final rnd = Random();
+        return _dueDate.removeAt(rnd.nextInt(_dueDate.length));
     }
     /// true - there are cards to repeat today
     /// false - there are no cards to repeat today
@@ -41,7 +28,7 @@ class SM2 {
         }
         _dueDate.clear();
         for (var card in _data) {
-            if(card.nextReviewDate.day == DateTime.now().day){
+            if(card.nextReviewDate.day <= DateTime.now().day){
                 _dueDate.add(card);
             }
         }
@@ -50,26 +37,30 @@ class SM2 {
         else return true;
     }
     static void addCard(Flashcard card) => _data.add(card);
-    static void saveAllCards(){
+    static void saveAllCards() {
         final file = File('data.json');
-        if(!file.existsSync()) return;
-        file.writeAsStringSync("[]");
+        if(file.existsSync()) file.writeAsStringSync("[]");
         String json = jsonEncode( SM2.data,
         toEncodable: (Object? value) => value is Flashcard
             ? Flashcard.toJson(value)
             : throw UnsupportedError('Cannot convert to JSON: $value'));
-
-        file.writeAsString(json);
+        file.writeAsStringSync(json);
     }
     static void getAllCardsFromSave(){
-        final file = File('data.json').readAsStringSync();
-        final json = jsonDecode( file) as List;
+        final file = File('data.json');
+        if(!file.existsSync()) {
+            print("There is no file data.json");
+            return;
+        }
+        final info = file.readAsStringSync(encoding: utf8);
+        if(info.length < 5){
+            print("File is empty");
+            return;
+        }
+        final json = jsonDecode( info) as List;
         _data.clear();
         for (var element in json) 
             _data.add(Flashcard.fromJson(element as Map<String, dynamic>));
-
-        //final aaaaa = json.forEach((card) => Flashcard.fromJson(card));
-        //print(aaaaa);
     }   
 }
 
@@ -106,30 +97,54 @@ class SM2UI{
         Console.displayOptionsAndHandleChoice(options);
     }
     static void startFlashcardSession(){
+        Console.clear();
+        
         while(true){
             final card = SM2.getClosestReviewCard();
             if(card == null){
                 print("There is nothing to review today");
+                _backToMenu();
                 return;
             }
-            print(card.question);
-            final quolity = Console.promptValidateIntDouble("Enter your update review quality", 
+            print("${Console.symbolColorDef("Question:")} ${card.question}");
+            stdout.write("\n${Console.colorDefText()}"
+            "Press ${Console.symbolColorDef("Enter")}${Console.colorDefText()} "
+            "to see the resault: ");
+            stdin.readLineSync();
+            Console.clearPreviousLines(2);
+            stdout.write("${Console.symbolColorDef("Answer:")} ${card.answer}");
+            final quolity = Console.promptValidateIntDouble("\n${Console.colorDefText()}Enter your update review quality: ", 
             onStringCheck: (input) {
                 if(input.contains("*")){
                     _backToMenu();
                     return;
                 }
-            }).toInt();      
+            },
+            countOfLinesToClear: 4).toInt();      
             card.updateReview(quolity);
         }
     }
     static void addNewFlashcard(){
-        Console.clear(); 
-        // todo: make something better here, like ability to cancel creating or restart
-        final question = Console.promptValidate("Question: ");
-        final answer = Console.promptValidate("Answer: ");
-        SM2.addCard(Flashcard(question: question, answer: answer, repetitions: 0, interval: 0, easeFactor: 0, nextReviewDate: DateTime.now()));
-        _backToMenu();
+        while(true){
+            Console.clear(); 
+            // todo: make something better here, like ability to cancel creating or restart
+            final question = Console.promptValidate("Question: ", countOfLinesToClear: 4,
+            onStringCheck: (input) {
+                if(input.contains("*")){
+                    _backToMenu();
+                    return;
+                }
+            });
+            final answer = Console.promptValidate("Answer: ", countOfLinesToClear: 4,
+            onStringCheck: (input) {
+                if(input.contains("*")){
+                    _backToMenu();
+                    return;
+                }
+            });
+            SM2.addCard(Flashcard(question: question, answer: answer, repetitions: 0, interval: 0, easeFactor: 0, nextReviewDate: DateTime.now()));
+            SM2.saveAllCards();
+        }
     }
     static void saveAllFlashcards(){
           print("Saving");
@@ -138,17 +153,19 @@ class SM2UI{
               stdout.write('.');
               sleep(Duration(milliseconds: 750));
           }
+          _backToMenu();
     }
     static void showAllCards(){
         if(SM2.data.isEmpty) {
-            Console.invalidInput(errorMessage: "There is no flashcards.");
+            Console.invalidInput(errorMessage: "There is no flashcards.", countOfLinesToClear: 4);
+            _backToMenu();
             return;
         }
         Console.clear();
         for (var card in SM2.data) {
             print(""
-            "\n${Console.symbolColorDef("Answer")}: ${Console.symbolColorAddit(card.answer)} "
             "\n${Console.symbolColorDef("Question")}: ${Console.symbolColorAddit(card.question)}"
+            "\n${Console.symbolColorDef("Answer")}: ${Console.symbolColorAddit(card.answer)} "
             "\n${Console.symbolColorDef("Interval")}: ${Console.symbolColorAddit(card.interval.toString())}"
             "\n${Console.symbolColorDef("EaseFactor")}: ${Console.symbolColorAddit(card.easeFactor.toString())}"
             "\n${Console.symbolColorDef("NextReviewDate")}: ${Console.symbolColorAddit(card.nextReviewDate.toString())} \n");
@@ -163,7 +180,22 @@ class SM2UI{
 
 
 
+
+
+
+
+
+
+
+
+
 /* 
+
+
+
+
+
+
 
 
 
@@ -195,6 +227,10 @@ class SM2UI{
         \"nextReviewDate\":\"2025-08-22 00:20:59.953171\"
     }
 ]"
+
+
+
+
 
  */
 
