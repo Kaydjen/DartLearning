@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import '00_hub_core/data/MenuMassages.dart';
-import '00_hub_core/menu_system/Menu.dart';
-import '01_sys/Console.dart';
+import '../../00_hub_core/data/MenuMassages.dart';
+import '../../00_hub_core/menu_system/Menu.dart';
+import '../../01_sys/Console.dart';
 import 'Flashcard.dart';
 
 class SM2 {
@@ -38,16 +38,16 @@ class SM2 {
     }
     static void addCard(Flashcard card) => _data.add(card);
     static void saveAllCards() {
-        final file = File('data.json');
+        final file = File('02_big_complited_projects\\flashcards\\data.json');
         if(file.existsSync()) file.writeAsStringSync("[]");
         String json = jsonEncode( SM2.data,
         toEncodable: (Object? value) => value is Flashcard
             ? Flashcard.toJson(value)
             : throw UnsupportedError('Cannot convert to JSON: $value'));
         file.writeAsStringSync(json);
-    }
+    }   
     static void getAllCardsFromSave(){
-        final file = File('data.json');
+        final file = File('02_big_complited_projects\\flashcards\\data.json');
         if(!file.existsSync()) {
             print("There is no file data.json");
             return;
