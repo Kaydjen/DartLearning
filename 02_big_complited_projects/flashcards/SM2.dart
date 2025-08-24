@@ -11,6 +11,8 @@ class SM2 {
     static List<Flashcard> _data = [];
     static List<Flashcard> _dueDate = [];
     static List<Flashcard> get data => _data;
+    static const String _dataPath = "C:\\Users\\Administrator\\AppData\\Local\\Flashcards\\data.json";
+    static const String _pathToData = "C:\\Users\\Administrator\\AppData\\Local\\Flashcards";
     static Flashcard? getClosestReviewCard(){
         if(!collectDueCards()) {
             //print("There is nothing to repeat today");
@@ -38,7 +40,8 @@ class SM2 {
     }
     static void addCard(Flashcard card) => _data.add(card);
     static void saveAllCards() {
-        final file = File('02_big_complited_projects\\flashcards\\data.json');
+        if(!Directory(_pathToData).existsSync()) Directory(_pathToData).create();
+        final file = File(_dataPath);
         if(file.existsSync()) file.writeAsStringSync("[]");
         String json = jsonEncode( SM2.data,
         toEncodable: (Object? value) => value is Flashcard
@@ -47,7 +50,7 @@ class SM2 {
         file.writeAsStringSync(json);
     }   
     static void getAllCardsFromSave(){
-        final file = File('02_big_complited_projects\\flashcards\\data.json');
+        final file = File(_dataPath);
         if(!file.existsSync()) {
             print("There is no file data.json");
             return;
