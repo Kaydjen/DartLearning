@@ -21,5 +21,6 @@ void gay() {
     print('You are straight');
   }
   String? asd = stdin.readLineSync();
+  asd = asd;
   gay();
 }

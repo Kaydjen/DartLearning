@@ -24,6 +24,7 @@ class MergeShopCart {
         else if(b == 4) addingPorducts();
         else if(b == 5) merging();
         else if(b == 6) comparing();
+        else if(b == 7) smotret();
         else print('Have a good day');
         sleep(Duration(seconds: 2));
         print("\x1B[2J\x1B[0;0H");
@@ -260,6 +261,9 @@ class MergeShopCart {
             print(ComAdded);
             print(ComDeleted);
             print(ComEdited);
+        }
+        static void smotret(){
+            print(Carts);
         }
 }
 

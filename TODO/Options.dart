@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'Options.dart';
 
 class Options{
     static void options1() async{
@@ -39,7 +38,7 @@ class Options{
             lines.removeAt(a! - 1);
             await file.writeAsString(''.trim());
             for(int i=0; i < lines.length; i++){
-            if (lines[i] == null || lines[i] == ''){
+            if (lines[i] == ''){
                 lines.removeAt(i);
             }
             file.writeAsStringSync(lines[i], mode:FileMode.append);
@@ -55,7 +54,7 @@ class Options{
             lines.sort();
             await file.writeAsString(''.trim());
             for(int i=0; i < lines.length; i++){
-            if (lines[i] == null || lines[i] == ''){
+            if (lines[i] == ''){
                 lines.removeAt(i);
             }
             file.writeAsStringSync(lines[i], mode:FileMode.append);

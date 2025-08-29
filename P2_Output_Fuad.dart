@@ -18,7 +18,7 @@ import 'dart:io';
 */
 
 void Fuad() {
-  String? input = stdin.readLineSync();
+  //String? input = stdin.readLineSync();
   print('негр');
 }
 
