@@ -1,11 +1,20 @@
-import '00_hub_core/menu_system/Menu.dart';
-import '00_hub_core/menu_system/WelcomeMenu.dart';
+// import '00_hub_core/menu_system/Menu.dart';
+// import '00_hub_core/menu_system/WelcomeMenu.dart';
 import '01_sys/Console.dart';
+import '06_cli_economic_simulation/lib/domain/entities/entity.dart';
+import '06_cli_economic_simulation/lib/domain/repositories/entity_repo.dart';
 
 void main() {
     Console.setConsoleSize(Console.height, Console.width);
-    WelcomeMenu.showWelcomeMessage();
-    Menu.runMenu(menuTypes.main);  
+    // WelcomeMenu.showWelcomeMessage();
+    // Menu.runMenu(menuTypes.main);  
+
+    EntityRepo repo = EntityRepo({
+        "1": Entity("xui", "dwa"),
+        "2": Entity("xui", "try"),
+    });
+
+    print("${repo["1"]!.id}: ${repo["1"]!.name}");
 }
 
 

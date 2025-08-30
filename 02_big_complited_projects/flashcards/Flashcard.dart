@@ -17,8 +17,6 @@ class Flashcard{
         interval = json["interval"] as int,
         easeFactor = json["easeFactor"] as double,
         nextReviewDate = DateTime.parse(json["nextReviewDate"] as String);
-        
-
     static Map<String, dynamic> toJson(Flashcard card) =>
       {
         'question': card.question, 

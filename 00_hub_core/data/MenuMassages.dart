@@ -1,8 +1,8 @@
 import '../../02_big_complited_projects/Cart.dart';
+import '../../02_big_complited_projects/flashcards/sm2_ui.dart';
 import '../../03_junk_drawer/P2/OutputNegr.dart';
 import '../../03_junk_drawer/WordHunterRundomDraw.dart';
 import '../../03_junk_drawer/WordFrequency.dart';
-import '../../02_big_complited_projects/flashcards/SM2.dart';
 import '../menu_system/Menu.dart';
 import '../../03_junk_drawer/P2/Statements.dart';
 import '../menu_system/WelcomeMenu.dart';

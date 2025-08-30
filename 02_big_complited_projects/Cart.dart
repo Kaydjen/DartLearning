@@ -285,7 +285,7 @@ class CartUI{
                 cart[keyToProduct] = _promptValidateInt("Quantity: ", countOfLinesToClear: 3);
             }
         }
-
+        
         _backToMenu();
     }
     static void createCart() {

@@ -1,5 +1,33 @@
-import 'company.dart';
+/*
+BotCompany — наследник Company, действует автоматически по стратегии.
 
-class BotCompany extends Company{
-    //strategy: BotStrategy
-}
+Назначение:
+- Представлять автоматического торгового агента.
+- Хранить ссылку на стратегию и конфиг поведения.
+
+Обязательные поля:
+- унаследованные из Company
+- String strategyId       // идентификатор выбранной стратегии
+- Map<String,dynamic> strategyParams // параметры стратегии (risk, maxPosition и т.д.)
+
+Инварианты:
+- bot не должен иметь отрицательного баланса (если достигает — объявляется bankrupt)
+- стратегии не должны напрямую менять состояния вне сервисов (они возвращают набор OrderSpec)
+
+Публичные методы (словесно):
+- decide(BotContext ctx) -> List<OrderSpec>    // вызывается каждый тик; возвращает заявки для отправки в MatchingEngine
+- onTick(tickIndex) -> void                    // вызывает decide с контекстом; реализуется как Tickable на уровне сервиса
+
+Сериализация:
+- toMap включает strategyId и strategyParams
+
+События:
+- BotDecision { botId, decisions, tick }
+
+Тесты:
+- deterministic seed: при одинаковых входных данных стратегия должна выдавать предсказуемый набор заявок (если seed фиксирован)
+- контроль на превышение лимитов (maxPosition, maxExposure)
+
+Примечание:
+- Не хранить в BotCompany "живые" объекты стратегии — использовать фабрику/реестр для получения стратегии по id, чтобы сохранять конфиг в toMap/fromMap.
+*/
