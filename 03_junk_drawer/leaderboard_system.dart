@@ -13,7 +13,7 @@ Problem: Build a leaderboard where users earn points. You must:
     Name: score
     String: int
  */
-import 'MapInvertor.dart';
+import 'map_invertor.dart';
 
 class LeaderboardSystem{
     static Map<String, int> _data = Map();

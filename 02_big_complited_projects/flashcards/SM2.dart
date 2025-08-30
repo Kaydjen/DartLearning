@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'Flashcard.dart';
+import 'flashcard.dart';
 
 class SM2 {
     static List<Flashcard> _data = [];
@@ -20,7 +20,7 @@ class SM2 {
     /// true - there are cards to repeat today
     /// false - there are no cards to repeat today
     static bool collectDueCards(){
-        if(_dueDate.length > 0) {
+        if(_dueDate.isNotEmpty) {
             //print("The _dueDate is already filled for today");
             return true;
         }

@@ -1,12 +1,12 @@
-import '../../02_big_complited_projects/Cart.dart';
+import '../../02_big_complited_projects/cart.dart';
 import '../../02_big_complited_projects/flashcards/sm2_ui.dart';
-import '../../03_junk_drawer/P2/OutputNegr.dart';
-import '../../03_junk_drawer/WordHunterRundomDraw.dart';
-import '../../03_junk_drawer/WordFrequency.dart';
+import '../../03_junk_drawer/p2/output_negr.dart';
+import '../../03_junk_drawer/word_hunter_random_draw.dart';
+import '../../03_junk_drawer/word_frequency.dart';
 import '../menu_system/Menu.dart';
-import '../../03_junk_drawer/P2/Statements.dart';
-import '../menu_system/WelcomeMenu.dart';
-import 'VisualTextElements.dart';
+import '../../03_junk_drawer/p2/statements.dart';
+import '../menu_system/welcome_menu.dart';
+import 'visual_text_elements.dart';
 
 class MenuMessages {
     static final Map<int, ChoosableOptions> firstMenuOptions = {
@@ -16,11 +16,11 @@ class MenuMessages {
         ),
         1: ChoosableOptions
         ("Show junk drawer scripts", 
-        () => Menu.runMenu(menuTypes.junk_drawer)
+        () => Menu.runMenu(menuTypes.junkDrawer)
         ),
         2: ChoosableOptions
         ("Show big complited projects", 
-        () => Menu.runMenu(menuTypes.big_projects)
+        () => Menu.runMenu(menuTypes.bigProjects)
         ),
         666: ChoosableOptions
         ("Show the welcome-menu again", 

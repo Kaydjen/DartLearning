@@ -23,7 +23,7 @@ class Statements {
                 print("Your number is odd");
             doReturn = false;
         }
-        Menu.runMenuWithDelay(menuTypes.junk_drawer, 2000);
+        Menu.runMenuWithDelay(menuTypes.junkDrawer, 2000);
     }
     static void run() {
         stdout.writeln("Please, enter your value");
@@ -37,6 +37,6 @@ class Statements {
         if(true){
             print("XUI");
         }
-        Menu.runMenuWithDelay(menuTypes.junk_drawer, 2000);
+        Menu.runMenuWithDelay(menuTypes.junkDrawer, 2000);
     }
 }

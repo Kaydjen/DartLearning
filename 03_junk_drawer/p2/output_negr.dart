@@ -8,7 +8,7 @@ class OutputNegr {
       print("Нигер");
       if (input == "") return; // just made it so vs code won't give me warning
 
-      Menu.runMenuWithDelay(menuTypes.junk_drawer, 2000);
+      Menu.runMenuWithDelay(menuTypes.junkDrawer, 2000);
     }
     List<String> a = List.filled(2, "");
     static void run() {
@@ -20,6 +20,6 @@ class OutputNegr {
         else
           print("You are invalid - you entered the wrong value");
      
-        Menu.runMenuWithDelay(menuTypes.junk_drawer, 2000);
+        Menu.runMenuWithDelay(menuTypes.junkDrawer, 2000);
     }
 }

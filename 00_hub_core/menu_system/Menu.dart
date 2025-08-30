@@ -1,18 +1,18 @@
 import 'dart:io';
-import '../data/MenuMassages.dart';
+import '../data/menu_massages.dart';
 import '../../01_sys/Console.dart';
 
 enum menuTypes {
     main,
-    junk_drawer,
-    big_projects
+    junkDrawer,
+    bigProjects
 }
 
 class Menu {
     static Map<menuTypes, Map<int, ChoosableOptions>> menuType = {
         menuTypes.main: MenuMessages.firstMenuOptions,
-        menuTypes.junk_drawer: MenuMessages.junkDrawerOptions,
-        menuTypes.big_projects: MenuMessages.bigComplitedProjectsOptions,
+        menuTypes.junkDrawer: MenuMessages.junkDrawerOptions,
+        menuTypes.bigProjects: MenuMessages.bigComplitedProjectsOptions,
     };
     static void runMenu(menuTypes menu){
         Console.clear();

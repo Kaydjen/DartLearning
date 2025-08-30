@@ -1,6 +1,6 @@
 import 'dart:io';
-import '../data/VisualTextElements.dart';
-import '../../01_sys/Console.dart';
+import '../data/visual_text_elements.dart';
+import '../../01_sys/console.dart';
 import 'Menu.dart';
 
 class WelcomeMenu {

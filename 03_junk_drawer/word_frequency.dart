@@ -41,6 +41,6 @@ class WordFrequency{
         stdin.echoMode = false; 
         print("\n  To return in main lobby press Enter");
         stdin.readLineSync();
-        Menu.runMenu(menuTypes.junk_drawer);
+        Menu.runMenu(menuTypes.junkDrawer);
     }
 }

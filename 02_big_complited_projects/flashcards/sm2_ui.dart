@@ -1,9 +1,9 @@
 import 'dart:io';
-import '../../00_hub_core/data/MenuMassages.dart';
-import '../../00_hub_core/menu_system/Menu.dart';
-import '../../01_sys/Console.dart';
-import 'Flashcard.dart';
-import 'SM2.dart';
+import '../../00_hub_core/data/menu_massages.dart';
+import '../../00_hub_core/menu_system/menu.dart';
+import '../../01_sys/console.dart';
+import 'flashcard.dart';
+import 'sm2.dart';
 
 class SM2UI{
     static Map<int, ChoosableOptions> options = {
