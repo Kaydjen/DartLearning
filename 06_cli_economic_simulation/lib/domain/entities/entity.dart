@@ -31,4 +31,12 @@ class Entity {
     String id;
     String name;
     Entity(this.id, this.name);
+
+    @override
+  String toString() {
+    return ''
+    'id: $id'
+    'name: $name'
+    '';
+  }
 }

@@ -1,47 +1,55 @@
-
-
 analyzer:
   language:
-    strict-raw-types: true
-    strict-casts: true
-
+    strict-casts: true          # Не даст сделать int a = '123' без явного преобразования
+    strict-raw-types: true      # Заставит писать List<String> вместо просто List
 
 linter:
   rules:
-    annotate_overrides: true
-    camel_case_extensions: true
-    collection_methods_unrelated_type: true
-    constant_identifier_names: true
-    use_rethrow_when_possible: true
+    # Защита от ошибок
+    control_flow_in_finally: true          # Не даст сделать return в finally (это опасно)
+    empty_catches: true                    # Не даст оставить пустой блок catch (ошибка будет проигнорирована)
+    exhaustive_cases: true                 # Проверит, что все варианты в switch учтены
+    null_check_on_nullable_type_parameter: true  # Проверит null перед использованием
+    null_closures: true                    # Не даст передать null вместо функции
+    use_rethrow_when_possible: true        # Подскажет использовать rethrow вместо throw в catch
 
-    # aren't neccessery
-    avoid_function_literals_in_foreach_calls: true
-    avoid_init_to_null: true
-    avoid_renaming_method_parameters: true
-    implicit_call_tearoffs: true
+    # Чистота кода
+    annotate_overrides: true               # Требует писать @override когда переопределяешь метод
+    camel_case_extensions: true            # Расширения должны называться как myExtension
+    recursive_getters: true                # Не даст сделать геттер, который вызывает сам себя
+    slash_for_doc_comments: true           # Документация должна быть через /// а не //
+    unnecessary_underscores: true          # Уберет лишние _ в коде
 
-    # let it be
-    avoid_return_types_on_setters: true
-    avoid_returning_null_for_void: true
-    avoid_types_as_parameter_names: true
+    # Работа с типами
+    avoid_init_to_null: true               # Не даст написать String? name = null (лишнее)
+    avoid_types_as_parameter_names: true   # Не даст назвать параметр (int String) - плохое имя
+    collection_methods_unrelated_type: true # Поймает [1,2,3].contains('hello') - разные типы
+    constant_identifier_names: true        # Константы должны быть БОЛЬШИМИ_БУКВАМИ
+    non_constant_identifier_names: true    # Не даст назвать переменную как константу
+    prefer_if_null_operators: true         # Подскажет использовать ?? вместо if(x == null)
+    use_function_type_syntax_for_parameters: true # Единый стиль для типов функций
 
-    control_flow_in_finally: true
-    #curly_braces_in_flow_control_structures: true
-    empty_catches: true
-    empty_constructor_bodies: true
-    empty_statements: true
-    exhaustive_cases: true
-    file_names: true
-    non_constant_identifier_names: true
-    null_check_on_nullable_type_parameter: true
-    null_closures: true
-    prefer_adjacent_string_concatenation: true
-    prefer_conditional_assignment: true
-    prefer_if_null_operators: true
-    prefer_is_empty: true
-    recursive_getters: true
-    slash_for_doc_comments: true
-    unnecessary_constructor_name: true
-    unnecessary_to_list_in_spreads: true
-    unnecessary_underscores: true
-    use_function_type_syntax_for_parameters: true
+    # Скорость работы
+    avoid_function_literals_in_foreach_calls: true # forEach с функцией медленнее чем for
+    prefer_is_empty: true                  # Подскажет использовать isEmpty вместо length == 0
+    unnecessary_to_list_in_spreads: true   # Уберет лишнее toList() в ...[list].toList()
+
+    # Методы и свойства
+    avoid_return_types_on_setters: true    # Сеттер не должен возвращать значение
+    avoid_returning_null_for_void: true    # void метод не должен возвращать null
+
+    # Именование
+    avoid_renaming_method_parameters: true # При переопределении имена параметров должны совпадать
+    implicit_call_tearoffs: true           # Контролирует когда можно опускать скобки у методов
+
+    # Строки
+    prefer_adjacent_string_concatenation: true # 'hello' 'world' вместо 'hello' + 'world'
+    prefer_conditional_assignment: true     # x ??= value вместо if(x == null) x = value
+
+    # Конструкторы
+    empty_constructor_bodies: true         # Не даст оставить пустой конструктор {}
+    empty_statements: true                 # Поймает лишние ; и пустые строки кода
+    unnecessary_constructor_name: true     # Уберет лишнее имя конструктора
+
+    # Файлы
+    file_names: true                       # Имена файлов должны быть в snake_case

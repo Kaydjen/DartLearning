@@ -1,4 +1,4 @@
-import '../../02_big_complited_projects/cart.dart';
+import '../../02_big_complited_projects/cart/cart_ui.dart';
 import '../../02_big_complited_projects/flashcards/sm2_ui.dart';
 import '../../03_junk_drawer/p2/output_negr.dart';
 import '../../03_junk_drawer/word_hunter_random_draw.dart';
