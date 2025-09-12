@@ -1,6 +1,6 @@
 import 'dart:io';
 import '../data/menu_massages.dart';
-import '../../01_sys/Console.dart';
+import '../../01_sys/console.dart';
 
 enum menuTypes {
     main,

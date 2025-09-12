@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import '../01_sys/Console.dart';
+import '../01_sys/console.dart';
 
 class WordHunterRundomDraw {
     static void run(){

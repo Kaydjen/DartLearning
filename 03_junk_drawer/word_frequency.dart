@@ -12,7 +12,7 @@ Skills: Map<String, int>, splitting strings, loop logic.
 
 import 'dart:io';
 import '../00_hub_core/menu_system/Menu.dart';
-import '../01_sys/Console.dart';
+import '../01_sys/console.dart';
 
 class WordFrequency{
     static void run(){
@@ -31,10 +31,10 @@ class WordFrequency{
         }
         List<String> newText = text.toLowerCase().replaceAll(new RegExp(r'[^\w\s]+'),'').split(' ');
 
-        newText.forEach((el) {
+        for (var el in newText) {
             if(txt.containsKey(el)) txt[el] = txt[el]! + 1;
             else txt.putIfAbsent(el, () => 1);
-        });
+        }
         for (var word in txt.keys) 
             print("    ${word}: ${txt[word]}");
 
