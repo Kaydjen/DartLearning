@@ -7,10 +7,12 @@
 // import 'LetterCounter.dart';
 // import 'GroupByFirstLetter.dart';
 //import 'MiniProjects/ShowLetters.dart';
-import 'Cart/MergeShopCart.dart';
+//import 'Cart/MergeShopCart.dart';
+import 'Flashcards/flashcard.dart';
+import 'Flashcards/input.dart';
 
 void main() { //STATIC void main();
-    MergeShopCart.merge();
+    Input.userInput();
 }
 
 
