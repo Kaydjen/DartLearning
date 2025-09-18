@@ -1,8 +1,12 @@
 import 'dart:io';
 import '../../00_hub_core/data/menu_massages.dart';
 import '../../00_hub_core/menu_system/Menu.dart';
+import '../../01_sys/color.dart';
 import '../../01_sys/console.dart';
+import '../../01_sys/display_handler.dart';
+import '../../01_sys/prompt_handler.dart';
 import 'flashcard.dart';
+import 'flashcard_review_extension.dart';
 import 'sm2.dart';
 
 class SM2UI{
@@ -35,7 +39,7 @@ class SM2UI{
             SM2.getAllCardsFromSave();
             isFirstStart = true;
         } 
-        Console.displayOptionsAndHandleChoice(options);
+        Display.optionsAndHandleChoice(options);
     }
     static void startFlashcardSession(){
         Console.clear();
@@ -43,42 +47,45 @@ class SM2UI{
         while(true){
             final card = SM2.getClosestReviewCard();
             if(card == null){
-                print("There is nothing to review today");
-                _backToMenu();
+                print("${Color.red()}There is nothing to review today");
+                mainMenu();
                 return;
             }
-            print("${Console.symbolColorDef("Question:")} ${card.question}");
-            stdout.write("\n${Console.colorDefText()}"
-            "Press ${Console.symbolColorDef("Enter")}${Console.colorDefText()} "
-            "to see the resault: ");
+            print("${Color.darkRed()}Question: ${Color.reset()}${card.question}");
+            stdout.write(
+            "${Color.grayDark()}Press "
+            "${Color.brightCyan()}Enter "
+            "${Color.grayDark()}to see the resault: ");
             stdin.readLineSync();
             Console.clearPreviousLines(2);
-            stdout.write("${Console.symbolColorDef("Answer:")} ${card.answer}");
-            final quolity = Console.promptValidateIntDouble("\n${Console.colorDefText()}Enter your update review quality: ", 
+            stdout.write("${Color.green()}Answer: ${Color.reset()}${card.answer}");
+            final quolity = Prompt.promptValidateIntDouble("\n${Color.grayDark()}Enter your update review quality: ", 
             onStringCheck: (input) {
-                if(input.contains("*")){
+                if(input.contains("*") && input.length == 1){
                     _backToMenu();
                     return;
                 }
             },
             countOfLinesToClear: 4).toInt();      
+            Console.clear();
             card.updateReview(quolity);
+            
         }
     }
     static void addNewFlashcard(){
         while(true){
             Console.clear(); 
             // todo: make something better here, like ability to cancel creating or restart
-            final question = Console.promptValidate("Question: ", countOfLinesToClear: 4,
+            final question = Prompt.promptValidate("Question: ", countOfLinesToClear: 4,
             onStringCheck: (input) {
-                if(input.contains("*")){
+                if(input.contains("*") && input.length == 1){
                     _backToMenu();
                     return;
                 }
             });
-            final answer = Console.promptValidate("Answer: ", countOfLinesToClear: 4,
+            final answer = Prompt.promptValidate("Answer: ", countOfLinesToClear: 4,
             onStringCheck: (input) {
-                if(input.contains("*")){
+                if(input.contains("*") && input.length == 1){
                     _backToMenu();
                     return;
                 }
@@ -98,23 +105,23 @@ class SM2UI{
     }
     static void showAllCards(){
         if(SM2.data.isEmpty) {
-            Console.invalidInput(errorMessage: "There is no flashcards.", countOfLinesToClear: 4);
+            Prompt.invalidInput(errorMessage: "There is no flashcards.", countOfLinesToClear: 4);
             _backToMenu();
             return;
         }
         Console.clear();
         for (var card in SM2.data) {
             print(""
-            "\n${Console.symbolColorDef("Question")}: ${Console.symbolColorAddit(card.question)}"
-            "\n${Console.symbolColorDef("Answer")}: ${Console.symbolColorAddit(card.answer)} "
-            "\n${Console.symbolColorDef("Interval")}: ${Console.symbolColorAddit(card.interval.toString())}"
-            "\n${Console.symbolColorDef("EaseFactor")}: ${Console.symbolColorAddit(card.easeFactor.toString())}"
-            "\n${Console.symbolColorDef("NextReviewDate")}: ${Console.symbolColorAddit(card.nextReviewDate.toString())} \n");
+            "\n${Color.set(ColorTypes.red, str: "Question")}: ${Color.set(ColorTypes.def, str: (card.question))}"
+            "\n${Color.set(ColorTypes.red, str: "Answer")}: ${Color.set(ColorTypes.def, str: (card.answer))} "
+            "\n${Color.set(ColorTypes.red, str: "Interval")}: ${Color.set(ColorTypes.def, str: (card.interval.toString()))}"
+            "\n${Color.set(ColorTypes.red, str: "EaseFactor")}: ${Color.set(ColorTypes.def, str: (card.easeFactor.toString()))}"
+            "\n${Color.set(ColorTypes.red, str: "NextReviewDate")}: ${Color.set(ColorTypes.def, str: (card.nextReviewDate.toString()))} \n");
         }
         _backToMenu();
     }
     static void _backToMenu(){
-        Console.prompt("\n\u001b[38;5;252mPress ${Console.symbolColorDef("Enter")} to go to main menu: ");
+        Prompt.prompt("\n${Color.reset()}Press ${Color.brightCyan()}Enter${Color.reset()} to go to main menu: ");
         mainMenu();
     }
 }

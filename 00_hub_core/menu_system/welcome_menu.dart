@@ -1,6 +1,6 @@
 import 'dart:io';
+import '../../01_sys/color.dart';
 import '../data/visual_text_elements.dart';
-import '../../01_sys/console.dart';
 import 'Menu.dart';
 
 class WelcomeMenu {
@@ -9,7 +9,7 @@ class WelcomeMenu {
       Menu.runMenu(menuTypes.main);
   }
   static void showWelcomeMessage() async {
-    Console.defColor();
+    Color.reset();
     // print logo line by line with delay
     for (String el in VisualTextElements.mainWelcomeLogo.split('|')) {
       stdout.write(el);

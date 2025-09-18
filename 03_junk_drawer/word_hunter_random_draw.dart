@@ -1,18 +1,19 @@
 import 'dart:io';
 import 'dart:math';
 
+import '../01_sys/color.dart';
 import '../01_sys/console.dart';
+import '../01_sys/prompt_handler.dart';
 
 class WordHunterRundomDraw {
     static void run(){
         Console.clear();
-        Console.defColor();
-        final length = Console.promptValidateIntDouble("Quantity of letters in word: ", countOfLinesToClear: 3).toInt();
-        print("${Console.symbolColorDef("Attention!!!")} if you'll write symbols apart from letters - program won't find it. ONLY LETTERS");
-        final word = Console.promptValidate("Word to search for: ", countOfLinesToClear: 3).toLowerCase();
+        final length = Prompt.promptValidateIntDouble("Quantity of letters in word: ", countOfLinesToClear: 3).toInt();
+        print("${Color.set(ColorTypes.brightCyan, str: "Attention!!!")} if you'll write symbols apart from letters - program won't find it. ONLY LETTERS");
+        final word = Prompt.promptValidate("Word to search for: ", countOfLinesToClear: 3).toLowerCase();
         print(
-            "See each word: ${Console.symbolColorDef("enter something")} "
-            "\nSee only resault: ${Console.symbolColorDef("press enter on empty line")}"
+            "See each word: ${Color.set(ColorTypes.brightCyan, str:"enter something")} "
+            "\nSee only resault: ${Color.set(ColorTypes.brightCyan, str:"press enter on empty line")}"
             "\nChoose the option: ");
         final input = stdin.readLineSync();
         final doShowWord = input == null || input.isEmpty ? false : true;
@@ -31,11 +32,11 @@ class WordHunterRundomDraw {
                 counter = 0;
             }
             if(doShowWord)
-                print("${Console.symbolColorDef(maxCounter.toString())}.${Console.symbolColorAddit(counter.toString())} - ${letters}");
+                print("${Color.set(ColorTypes.brightCyan, str:maxCounter.toString())}.${Color.set(ColorTypes.brightCyan, str:counter.toString())} - ${letters}");
             
             if(letters.contains(word)) break;
         }
-        print("HERE IT IS ${Console.symbolColorAddit(maxCounter.toString())}-billion "
-        " ${Console.symbolColorAddit(counter.toString())} - ${Console.symbolColorDef(letters)}}");
+        print("HERE IT IS ${Color.set(ColorTypes.brightCyan, str:maxCounter.toString())}-billion "
+        " ${Color.set(ColorTypes.brightCyan, str:counter.toString())} - ${Color.set(ColorTypes.brightCyan, str:letters)}}");
     }
 }

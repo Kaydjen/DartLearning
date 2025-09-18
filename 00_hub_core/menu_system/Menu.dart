@@ -1,4 +1,6 @@
 import 'dart:io';
+import '../../01_sys/color.dart';
+import '../../01_sys/prompt_handler.dart';
 import '../data/menu_massages.dart';
 import '../../01_sys/console.dart';
 
@@ -72,8 +74,8 @@ class Menu {
         runMenu(menu);
     }
     static void invalidInput(menuTypes menu){
-        Console.defColor(false);
-        Console.invalidInput();
+        Color.red();
+        Prompt.invalidInput();
         runMenu(menu);
     }
 

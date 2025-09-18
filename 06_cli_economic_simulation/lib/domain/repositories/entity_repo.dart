@@ -37,8 +37,8 @@ EntityRepo<T extends Entity> — кастомный репозиторий су�
 - colliding add -> error
 */
 import '../entities/entity.dart';
-import '../errors/repo_exceptions.dart';
-import '../value/result.dart';
+import '../exeptions/repo_exceptions.dart';
+import '../../../../01_sys/exceptions/result_handler.dart';
 
 class EntityRepo<T extends Entity>{
     final Map<String,T> _byId;

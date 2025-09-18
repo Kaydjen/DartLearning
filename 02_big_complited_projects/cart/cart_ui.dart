@@ -1,7 +1,9 @@
 import 'dart:io';
 import '../../00_hub_core/data/menu_massages.dart';
 import '../../00_hub_core/menu_system/Menu.dart';
+import '../../01_sys/color.dart';
 import '../../01_sys/console.dart';
+import '../../01_sys/prompt_handler.dart';
 import 'cart.dart';
 
 class CartUI{
@@ -67,7 +69,9 @@ class CartUI{
     }
     static void showTips(){
         Console.clear();
-        print("1. To go to main menu type ${Console.symbolColorDef("'*'")} and press ${Console.symbolColorDef("Enter")}");
+        print("${Color.set(ColorTypes.def)}1. To go to main menu type "
+        "${Color.set(ColorTypes.brightCyan, str: "'*'", keepColor: false)} "
+        "and press ${Color.set(ColorTypes.brightCyan, str: "Enter", keepColor: false)}");
         _backToMenu();
     }
     /// Displays all carts and their contents in the console.
@@ -92,26 +96,27 @@ class CartUI{
         }
         print('');
         Cart.data[cartName]!.forEach((key, value) => print("    \u001b[38;5;204m${key}: \u001b[38;5;255m${value}"));
+        print('');
 
         _backToMenu();
     }
     static void addProducts(){
         Console.clear();
         Console.clearPreviousLines(2);
-        print("*Press Enter to exit and save\n"); 
+        print("${Color.grayWhite()}*Press Enter to exit and save\n"); 
         bool isAgain = false;
         String key;
         while(true){
-            final text =isAgain ? "Try again: " : "Enter cart's name: ";
+            final text =isAgain ? "${Color.reset()}Try again: " : "${Color.reset()}Enter cart's name: ";
             key = _promptValidate(text);
             if(_wantBackToMainMenu(key)) return;
             if(Cart.data.containsKey(key) && Cart.data[key] != null) break;
-            Console.invalidInput(errorMessage: "Cart with the given name doesn't exist", countOfLinesToClear: 3);
+            Prompt.invalidInput(errorMessage: "${Color.red()}Cart with the given name doesn't exist", countOfLinesToClear: 3);
             isAgain = true;
         }
         final cart = Cart.data[key]!;
         while(true){
-            final keyToProduct = _prompt("\nProduct name: ");
+            final keyToProduct = _prompt("\n${Color.grayWhite()}Product name: ");
             if(keyToProduct == null || keyToProduct.isEmpty) break;
             if (cart.containsKey(keyToProduct)) {
                 print("\u001b[38;5;252m");
@@ -121,14 +126,14 @@ class CartUI{
                       "\nPress \u001b[38;5;196mEnter\u001b[38;5;252m to exit and save.");   
                 print("\u001b[38;5;255m");
                 while (true) {
-                  final overwrite = _prompt("New quantity: ");
+                  final overwrite = _prompt("${Color.reset()}New quantity: ");
                   if (overwrite == null || overwrite.isEmpty || overwrite == '/') break;
                   if (_updateCartEntry(overwrite, cart, keyToProduct)) break;
                 }   
                 continue;
             } 
             else{
-                cart[keyToProduct] = _promptValidateInt("Quantity: ", countOfLinesToClear: 3);
+                cart[keyToProduct] = _promptValidateInt("${Color.grayWhite()}Quantity: ", countOfLinesToClear: 3);
             }
         }
         
@@ -136,39 +141,39 @@ class CartUI{
     }
     static void createCart() {
         Console.clear();
-        final String? cartName = _prompt("\nPlease, enter cart name: ");
+        final String? cartName = _prompt("\n${Color.reset()}Please, enter cart name: ");
         if (cartName == null || cartName.isEmpty) {
             print("");
-            Console.invalidInput(countOfLinesToClear: 4);
+            Prompt.invalidInput(countOfLinesToClear: 4);
             return createCart();
         }   
         if (Cart.data.containsKey(cartName)) {
             print("");
-            Console.invalidInput(errorMessage: "The cart with this name already exists.");
+            Prompt.invalidInput(errorMessage: "${Color.red()}The cart with this name already exists.");
             return createCart();
         }   
         print(
-            "\nNow, please, enter items:"
-            "\n- Press ${Console.symbolColorDef("Enter")} on empty line to finish"
-            "\n- Print ${Console.symbolColorDef("'-'")} to delete previous (not added yet)" // todo: add this shit
+            "\n${Color.reset()}Now, please, enter items:"
+            "\n- Press ${Color.brightCyan()}Enter ${Color.reset()}on empty line to finish"
+            "\n- Print ${Color.brightCyan()}'-' ${Color.reset()}to delete previous (not added yet)" // todo: add this shit
         );  
         final Map<String, int> newCart = {};    
         bool shouldEnd = false;
         while (!shouldEnd) {
-            final String? product = _prompt("\nProduct name: ");
+            final String? product = _prompt("\n${Color.grayWhite()}Product name: ");
             if (product == null || product.isEmpty) break;    
             if (newCart.containsKey(product)) {
-                print("Item already exists with quantity [${newCart[product]}].\n"
-                      "Enter new value to overwrite, '/' to abort.");   
+                print("${Color.red()}Item already exists with quantity ${Color.brightCyan()}[${newCart[product]}].\n"
+                      "${Color.reset()}Enter new value to overwrite, ${Color.brightCyan()}'/' ${Color.reset()}to abort.");   
                 while (true) {
-                  final String? overwrite = _prompt("New quantity: ");
+                  final String? overwrite = _prompt("${Color.reset()}New quantity: ");
                   if (overwrite == null || overwrite == '/' || overwrite.isEmpty) break;
                   if (_updateCartEntry(overwrite, newCart, product)) break;
                 }   
                 continue;
             } 
             while (true) {
-                final String? quantity = _prompt("Product quantity: ");
+                final String? quantity = _prompt("${Color.grayWhite()}Product quantity: ");
                 if (quantity == null || quantity.isEmpty) {
                     shouldEnd = true;
                     break;
@@ -182,35 +187,36 @@ class CartUI{
     static void removeCart(){
         Console.clear();
         String input;
-        do input = _promptValidate("Enter cart name to delete it: ");                                             // под чем я это писал... я хочу еще раз попробовать
+        do input = _promptValidate("${Color.reset()}Enter cart name to delete it: ");                                             // под чем я это писал... я хочу еще раз попробовать
         while(!Cart.deleteCart(input));        
-        print("\nCart was successfully deleted");
+        print("\n${Color.green()}Cart was successfully deleted");
         _backToMenu();
     }
     static void mergeCarts() {
         while(true){
             Console.clear();
-            String sourceCartName1 = _promptValidate("First cart to merge: ");
-            String sourceCartName2 = _promptValidate("\nSecond cart to merge: ");
-            String newCartName = _promptValidate("\nName of the new merged cart: ");
+            String sourceCartName1 = _promptValidate("${Color.reset()}First cart to merge: ");
+            String sourceCartName2 = _promptValidate("\n${Color.reset()}Second cart to merge: ");
+            String newCartName = _promptValidate("\n${Color.reset()}Name of the new merged cart: ");
             if(Cart.mergeCarts(sourceCartName1, sourceCartName2, newCartName)){
-                print("\nSuccessfully merged");
+                print("\n${Color.green()}Successfully merged");
                 break;
             }
-            Console.invalidInput(errorMessage: "Please, try again");
+            Prompt.invalidInput(errorMessage: "Please, try again");
         }
+        print("");
         _backToMenu();
     }
     static void diff(){
         Console.clear();
         (Map<String, int>, Map<String, int>, Map<String, (int, int)>)? changes;
         while(true){
-            final originalCartName = _promptValidate("Original cart's name: ", countOfLinesToClear: 3);
-            final updatedCartName = _promptValidate("Updated cart's name: ", countOfLinesToClear: 3);
+            final originalCartName = _promptValidate("${Color.reset()}Original cart's name: ", countOfLinesToClear: 3);
+            final updatedCartName = _promptValidate("${Color.reset()}Updated cart's name: ", countOfLinesToClear: 3);
 
             changes = Cart.compare(originalCartName, updatedCartName);
             if(changes == null)
-                Console.invalidInput(errorMessage: "Invalid name, try again.", countOfLinesToClear: 5);
+                Prompt.invalidInput(errorMessage: "Invalid name, try again.", countOfLinesToClear: 5);
             else break;
         }
 
@@ -231,8 +237,8 @@ class CartUI{
     static void showCartsHistory(){
         Console.clear();
         String? message = 
-        "\n${Console.symbolColorDef("1.")} Show history of all carts"
-        "\n${Console.symbolColorDef("2.")} Show history of certain cart"
+        "\n${Color.darkRed()}1. ${Color.reset()}Show history of all carts"
+        "\n${Color.darkRed()}2. ${Color.reset()}Show history of certain cart"
         "\nEnter option: ";
         int option = _promptValidateInt(message, countOfLinesToClear: 6);
         while(true){
@@ -242,7 +248,7 @@ class CartUI{
                     showCertainCartHistory(); 
                     break;
                 default: 
-                    Console.invalidInput(errorMessage: "You option is wrong, try again");
+                    Prompt.invalidInput(errorMessage: "You option is wrong, try again");
                     continue;
             }
             break;
@@ -254,9 +260,9 @@ class CartUI{
         bool isAgain = false;
         String key;
         while(true){
-            key = _promptValidate(isAgain ? "Try enter cart's name again: " : "Cart's name: ");
+            key = _promptValidate(isAgain ? "${Color.reset()}Try enter cart's name again: " : "${Color.reset()}Cart's name: ");
             if(Cart.historyData[key] == null) {
-                Console.invalidInput(errorMessage: "There is no history by this name", countOfLinesToClear: 3);
+                Prompt.invalidInput(errorMessage: "There is no history by this name", countOfLinesToClear: 3);
                 isAgain = true;
                 continue;
             }
@@ -264,9 +270,9 @@ class CartUI{
         }
         final listOfChanges = Cart.historyData[key]!;
         for (int i = 0; i < listOfChanges.length; i++) {
-            print("${Console.symbolColorDef(i.toString())}");
+            print("${Color.set(ColorTypes.brightCyan, str: "${i.toString()}", keepColor: false)}");
             for (var product in listOfChanges[i].entries) {
-                print("    \n${Console.symbolColorAddit(product.key)}: ${product.value}");
+                print("    \n${Color.set(ColorTypes.brightCyan, str: "${product.key}", keepColor: false)}: ${product.value}");
             }
         }
         _backToMenu();
@@ -274,13 +280,13 @@ class CartUI{
     static void showWholeHistory(){
         Console.clear();
         if(Cart.historyData.isEmpty) {
-            print("There is no carts' history");
+            print("${Color.red()}There is no carts' history");
             return;
         }
         for (var certainCartHistory in Cart.historyData.entries) {
-            print("${Console.symbolColorDef(certainCartHistory.key.toString())}");
+            print("${Color.set(ColorTypes.brightCyan, str: "${certainCartHistory.key.toString()}", keepColor: false)}");
             for (int i = 0; i < certainCartHistory.value.length; i++) {
-                print("${Console.symbolColorAddit(i.toString())}");
+                print("${Color.set(ColorTypes.brightCyan, str: "${i.toString()}", keepColor: false)}");
                 for (var product in certainCartHistory.value[i].entries) {
                     print("        \u001b[38;5;207m${product.key}:\u001b[38;5;255m ${product.value}");
                 }
@@ -297,7 +303,7 @@ class CartUI{
         else return false;
     }
     static void _backToMenu(){
-        _prompt("\n\u001b[38;5;252mPress Enter to go to main menu: ");
+        _prompt("${Color.grayWhite()}Press ${Color.brightCyan()}Enter ${Color.grayWhite()}to go to main menu: ");
         mainMenu();
     }
     static String _promptValidate(String message, {int countOfLinesToClear = 3}){
@@ -307,7 +313,7 @@ class CartUI{
                 if(input.contains("*")) mainMenu();
                 return input;            
             } 
-            Console.invalidInput(countOfLinesToClear: countOfLinesToClear);
+            Prompt.invalidInput(countOfLinesToClear: countOfLinesToClear);
         }
     }
     static int _promptValidateInt(String message, {int countOfLinesToClear = 3}){
@@ -318,7 +324,7 @@ class CartUI{
                 final option = int.tryParse(input);
                 if(option != null) return option;
             }           
-            Console.invalidInput(countOfLinesToClear: countOfLinesToClear);
+            Prompt.invalidInput(countOfLinesToClear: countOfLinesToClear);
         }
     }
     static String? _prompt(String message) {
@@ -331,7 +337,7 @@ class CartUI{
     static bool _updateCartEntry(String inputValueToKey, Map<String, int> cart, String keyToProduct) {
         final int? value = int.tryParse(inputValueToKey);
         if (value == null || value < 0) {
-            Console.invalidInput(errorMessage: "\nInvalid number. Try again.", countOfLinesToClear: 4);
+            Prompt.invalidInput(errorMessage: "\nInvalid number. Try again.", countOfLinesToClear: 4);
             return false;
         }
         cart[keyToProduct] = value;

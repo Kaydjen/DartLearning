@@ -1,4 +1,4 @@
-import '../errors/domain_error.dart';
+import 'domain_error.dart';
 
 class Result<T> {
   final T? value;

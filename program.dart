@@ -1,22 +1,20 @@
-// import '00_hub_core/menu_system/menu.dart';
-// import '00_hub_core/menu_system/welcome_menu.dart';
-// import '01_sys/console.dart';
-import '06_cli_economic_simulation/lib/domain/repositories/entity_repo.dart';
+import '00_hub_core/menu_system/menu.dart';
+import '00_hub_core/menu_system/welcome_menu.dart';
+import '01_sys/console.dart';
+// import '06_cli_economic_simulation/lib/domain/repositories/entity_repo.dart';
 
 void main() {
-    // Console.setConsoleSize(Console.height, Console.width);
-    // WelcomeMenu.showWelcomeMessage();
-    // Menu.runMenu(menuTypes.main);  
-
-    EntityRepo repo = EntityRepo({
-
-    });
-    final result = repo.tryGetById("");
-    if(result.isSuccess) print("ok");
-    else print(result.error);
+    Console.setConsoleSize(Console.height, Console.width);
+    WelcomeMenu.showWelcomeMessage();
+    Menu.runMenu(menuTypes.main);  
 }
 
+/* 
 
+961002FAB836819B599E770AA25FF02BFF1697D1D051140062066A5FF47D6712
+961002fab836819b599e770aa25ff02bff1697d1d051140062066a5ff47d6712
+
+ */
 /* 
 - Cart with name [name] was added;
 - Products [products] were added to cart [cart name];

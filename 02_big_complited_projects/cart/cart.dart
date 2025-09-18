@@ -1,4 +1,4 @@
-import '../../01_sys/console.dart';
+import '../../01_sys/prompt_handler.dart';
 
 class Cart{
     static Map<String, Map<String, int>> _carts = {
@@ -145,7 +145,7 @@ class Cart{
     }
     static bool deleteCart(String cartName){
         if(_carts[cartName] == null){
-            Console.invalidInput(errorMessage: "\nCan't delte, because cart doesn't exist or name differ", countOfLinesToClear: 4);
+            Prompt.invalidInput(errorMessage: "\nCan't delte, because cart doesn't exist or name differ", countOfLinesToClear: 4);
             return false;
         }
         _carts.remove(cartName);

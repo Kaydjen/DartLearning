@@ -4,9 +4,10 @@ import '../../00_hub_core/menu_system/Menu.dart';
 class OutputNegr {
     static void runNegra() {
       stdout.writeln("Please, enter something");
-      String? input = stdin.readLineSync();
+      //String? input = stdin.readLineSync();                                             1
+      stdin.readLineSync(); // new, bacause prewious lines 1 and 2 were wrong
       print("Нигер");
-      if (input == "") return; // just made it so vs code won't give me warning
+      //if (input == "") return; // just made it so vs code won't give me warning         2
 
       Menu.runMenuWithDelay(menuTypes.junkDrawer, 2000);
     }

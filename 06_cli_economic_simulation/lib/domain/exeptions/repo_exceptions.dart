@@ -1,6 +1,6 @@
-import '../../app/appearance/color.dart';
+import '../../../../01_sys/color.dart';
 import '../entities/entity.dart';
-import 'domain_error.dart';
+import '../../../../01_sys/exceptions/domain_error.dart';
 
 class ErrorIdNotFound extends DomainError{
     ErrorIdNotFound(String id, {Object? whereHappend})

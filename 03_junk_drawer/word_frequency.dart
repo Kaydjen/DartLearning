@@ -12,12 +12,14 @@ Skills: Map<String, int>, splitting strings, loop logic.
 
 import 'dart:io';
 import '../00_hub_core/menu_system/Menu.dart';
+import '../01_sys/color.dart';
 import '../01_sys/console.dart';
+import '../01_sys/prompt_handler.dart';
 
 class WordFrequency{
     static void run(){
         Console.clear();
-        Console.defColor();
+        Color.red();
         Console.placeCursor((Console.height/2).toInt());
         stdin.echoMode = true; 
         print("  Please, enter text");
@@ -25,7 +27,7 @@ class WordFrequency{
         Map<String, int> txt = Map();
         String? text = stdin.readLineSync();
         if(text == null){
-            Console.invalidInput(errorMessage: "Please, enter a proper text");
+            Prompt.invalidInput(errorMessage: "Please, enter a proper text");
             run();
             return;
         }

@@ -28,8 +28,7 @@ mixin Color{
     // additional gray colors
     static String grayDark() => "\u001b[38;5;240m";
     static String gray() => "\u001b[38;5;245m";
-    static String grayLight() => "\u001b[38;5;250m";
-    static String grayWhite() => "\u001b[38;5;255m";
+    static String grayWhite() => "\u001b[38;5;250m";
 
     // background colors
     static String bgBlack() => "\u001b[48;5;0m";
@@ -48,9 +47,13 @@ enum ColorTypes{
     red,
     brightGreen,
     brightCyan,
+    grayWhite,
+    def,
 }
 Map<ColorTypes, String> colorTypeMap = {
     ColorTypes.red: Color.red(),
     ColorTypes.brightGreen: Color.brightGreen(),
     ColorTypes.brightCyan: Color.brightCyan(),
+    ColorTypes.def: Color.reset(),
+    ColorTypes.grayWhite: Color.grayWhite(),
 };
