@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import '../../01_sys/exceptions/console_exeptions/element_exceptions.dart';
+import '../../01_sys/exceptions/console_exeptions/list_exceptions.dart';
+import '../../01_sys/exceptions/result_handler.dart';
 import 'flashcard.dart';
 
 class SM2 {
@@ -61,4 +64,12 @@ class SM2 {
         for (var element in json) 
             _data.add(Flashcard.fromJson(element as Map<String, dynamic>));
     }   
+    static Result<Flashcard> tryChangeContent(int index, {String? newQuestion, String? newAnswer}){
+        if(_data.length < index) return Result.fail(IndexOutOfRange("_data", index, SM2));
+        final card = _data[index];
+        if(newQuestion == null && newAnswer == null) return Result.fail(ElementsAreEmpty(["newQuestion", "newAnswer"], SM2));
+        if(newQuestion != null) card.question = newQuestion;
+        if(newAnswer != null) card.answer = newAnswer;
+        return Result.ok(card);
+    }
 }

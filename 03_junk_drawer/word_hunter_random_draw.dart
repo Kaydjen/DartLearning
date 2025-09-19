@@ -8,9 +8,9 @@ import '../01_sys/prompt_handler.dart';
 class WordHunterRundomDraw {
     static void run(){
         Console.clear();
-        final length = Prompt.promptValidateIntDouble("Quantity of letters in word: ", countOfLinesToClear: 3).toInt();
+        final length = Prompt.validateIntDouble("Quantity of letters in word: ", countOfLinesToClear: 3).toInt();
         print("${Color.set(ColorTypes.brightCyan, str: "Attention!!!")} if you'll write symbols apart from letters - program won't find it. ONLY LETTERS");
-        final word = Prompt.promptValidate("Word to search for: ", countOfLinesToClear: 3).toLowerCase();
+        final word = Prompt.validate("Word to search for: ", countOfLinesToClear: 3).toLowerCase();
         print(
             "See each word: ${Color.set(ColorTypes.brightCyan, str:"enter something")} "
             "\nSee only resault: ${Color.set(ColorTypes.brightCyan, str:"press enter on empty line")}"

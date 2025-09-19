@@ -10,7 +10,7 @@ class Display {
         print("\u001b[38;5;196m${optionDescription.key}.\u001b[38;5;255m ${optionDescription.value.description}");
         //Console.defColor();
         while(true){
-            final key = Prompt.promptValidateIntDouble(message, countOfLinesToClear: 3).toInt();
+            final key = Prompt.validateIntDouble(message, countOfLinesToClear: 3).toInt();
             if(options.containsKey(key)) {
                 options[key]!.onSelected!.call();            
                 break;

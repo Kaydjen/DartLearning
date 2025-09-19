@@ -59,7 +59,7 @@ class SM2UI{
             stdin.readLineSync();
             Console.clearPreviousLines(2);
             stdout.write("${Color.green()}Answer: ${Color.reset()}${card.answer}");
-            final quolity = Prompt.promptValidateIntDouble("\n${Color.grayDark()}Enter your update review quality: ", 
+            final quolity = Prompt.validateIntDouble("\n${Color.grayDark()}Enter your update review quality: ", 
             onStringCheck: (input) {
                 if(input.contains("*") && input.length == 1){
                     _backToMenu();
@@ -69,21 +69,20 @@ class SM2UI{
             countOfLinesToClear: 4).toInt();      
             Console.clear();
             card.updateReview(quolity);
-            
         }
     }
     static void addNewFlashcard(){
         while(true){
             Console.clear(); 
             // todo: make something better here, like ability to cancel creating or restart
-            final question = Prompt.promptValidate("Question: ", countOfLinesToClear: 4,
+            final question = Prompt.validate("Question: ", countOfLinesToClear: 4,
             onStringCheck: (input) {
                 if(input.contains("*") && input.length == 1){
                     _backToMenu();
                     return;
                 }
             });
-            final answer = Prompt.promptValidate("Answer: ", countOfLinesToClear: 4,
+            final answer = Prompt.validate("Answer: ", countOfLinesToClear: 4,
             onStringCheck: (input) {
                 if(input.contains("*") && input.length == 1){
                     _backToMenu();
@@ -125,6 +124,7 @@ class SM2UI{
         mainMenu();
     }
 }
+
 
 
 
