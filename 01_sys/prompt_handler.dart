@@ -2,13 +2,21 @@ import 'dart:io';
 import 'dart:convert';
 import 'color.dart';
 import 'console.dart';
+import 'exceptions/console_exeptions/string_exceptions.dart';
+import 'exceptions/result_handler.dart';
 
 class Prompt {
     /// It prints one single line in the middle of current console line
     static void printOneLn(String message){
-        int rows = ((Console.width - message.length)/2).round();
-        Console.placeCursor(rows);
-        print(message);
+        int rows = ((Console.width - visibleLength(message))/2).round();
+        print(' ' * rows + message);
+    }
+    static void printLns(List<String> list){
+        
+    }
+    static int visibleLength(String input) {
+        final ansiEscape = RegExp(r'\x1B\[[0-9;]*[a-zA-Z]');
+        return input.replaceAll(ansiEscape, '').length;
     }
     static void invalidInput({String errorMessage = "Please, enter proper input value ", String tipMessage = "",  int countOfLinesToClear = 3}){ // todo: polish of
         stdout.write(Color.set(ColorTypes.red, str: "$errorMessage ${Color.grayWhite()}\nRestarting"));
@@ -51,4 +59,49 @@ class Prompt {
         stdout.write("\u001b[38;5;255m");
         return input;
     }
+
+        static Result<Map<String, String>> getFlagsFromStr(String str, {String prefix = "--"}){
+        if(!str.contains(prefix)) return Result.fail(NoPrefixFound(str, prefix));
+        List<String> res = List.empty(growable: true); // from: "4 --key1 value1 -- key2   value2"  to -> [key1 value1, key2   value2]
+        List<int> indexes = List.empty(growable: true); // identify idexes of prefixes (index of first prefix above is 2)
+        int idex = 0;
+        do{ // get indexes of all prefixes
+            indexes.add(str.indexOf(prefix, (idex > 0 ? indexes[idex-1]+2 : 0)));
+            idex++;
+        }while(str.contains(prefix, indexes[idex-1]+1));
+        idex = 0;
+        do{ // get result list
+            res.add(str.substring(indexes[idex]+2, (indexes.length <= idex+1 ? str.length : indexes[idex+1])).trim());
+            idex++;
+        }while(idex < indexes.length);
+
+        Map<String, String> map = Map(); // key-value pairs obtained from [key1 value1, key2   value2]
+        for (var str in res) {
+            if(!str.contains(" ")) break;
+            final idex = str.indexOf(" ");
+            map[str.substring(0, idex)] = str.substring(idex).trim();
+        }
+        if(map.isEmpty) return Result.fail(FlagsNotFound(str, prefix));
+        else return Result.ok(map);
+    }
+
+    /* old, just save it, might come in handy 
+    
+        static Result<List<String>> getStrList(String str, {String prefix = "--"}){
+        if(!str.contains(prefix)) return Result.fail(NoPrefixFound(str, prefix));
+        List<String> res = List.empty(growable: true);
+        List<int> indexes = List.empty(growable: true);
+        int idex = 0;
+        do{
+            indexes.add(str.indexOf(prefix, (idex > 0 ? indexes[idex-1]+2 : 0)));
+            idex++;
+        }while(str.contains(prefix, indexes[idex-1]+1));
+        idex = 0;
+        do{
+            res.add(str.substring(indexes[idex]+2, (indexes.length <= idex+1 ? str.length : indexes[idex+1])).trim());
+            idex++;
+        }while(idex < indexes.length);
+        return Result.ok(res);
+    }
+     */
 }

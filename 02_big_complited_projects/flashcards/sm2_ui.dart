@@ -8,6 +8,7 @@ import '../../01_sys/prompt_handler.dart';
 import 'flashcard.dart';
 import 'flashcard_review_extension.dart';
 import 'sm2.dart';
+import 'sm2_ui_value_changer.dart';
 
 class SM2UI{
     static Map<int, ChoosableOptions> options = {
@@ -30,6 +31,10 @@ class SM2UI{
         4: ChoosableOptions(
             "Show all flashcards",
             showAllCards
+        ),
+        5: ChoosableOptions(
+            "Additional options (development...)",
+            SM2UIValueChanger.changeValue
         ),
     };
     static bool isFirstStart = false;
@@ -110,14 +115,16 @@ class SM2UI{
         }
         Console.clear();
         for (var card in SM2.data) {
-            print(""
-            "\n${Color.set(ColorTypes.red, str: "Question")}: ${Color.set(ColorTypes.def, str: (card.question))}"
-            "\n${Color.set(ColorTypes.red, str: "Answer")}: ${Color.set(ColorTypes.def, str: (card.answer))} "
-            "\n${Color.set(ColorTypes.red, str: "Interval")}: ${Color.set(ColorTypes.def, str: (card.interval.toString()))}"
-            "\n${Color.set(ColorTypes.red, str: "EaseFactor")}: ${Color.set(ColorTypes.def, str: (card.easeFactor.toString()))}"
-            "\n${Color.set(ColorTypes.red, str: "NextReviewDate")}: ${Color.set(ColorTypes.def, str: (card.nextReviewDate.toString()))} \n");
+            printCardContent(card);
         }
         _backToMenu();
+    }
+    static void printCardContent(Flashcard card){
+            Prompt.printOneLn("\n${Color.set(ColorTypes.red, str: "Question")}: ${Color.set(ColorTypes.def, str: (card.question))}");
+            Prompt.printOneLn("\n${Color.set(ColorTypes.red, str: "Answer")}: ${Color.set(ColorTypes.def, str: (card.answer))} ");
+            Prompt.printOneLn("\n${Color.set(ColorTypes.red, str: "Interval")}: ${Color.set(ColorTypes.def, str: (card.interval.toString()))}");
+            Prompt.printOneLn("\n${Color.set(ColorTypes.red, str: "EaseFactor")}: ${Color.set(ColorTypes.def, str: (card.easeFactor.toString()))}");
+            Prompt.printOneLn("\n${Color.set(ColorTypes.red, str: "NextReviewDate")}: ${Color.set(ColorTypes.def, str: (card.nextReviewDate.toString()))} \n");
     }
     static void _backToMenu(){
         Prompt.prompt("\n${Color.reset()}Press ${Color.brightCyan()}Enter${Color.reset()} to go to main menu: ");

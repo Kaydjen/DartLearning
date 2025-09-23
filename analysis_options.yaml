@@ -31,7 +31,6 @@ linter:
 
     # Скорость работы
     avoid_function_literals_in_foreach_calls: true # forEach с функцией медленнее чем for
-    prefer_is_empty: true                  # Подскажет использовать isEmpty вместо length == 0
     unnecessary_to_list_in_spreads: true   # Уберет лишнее toList() в ...[list].toList()
 
     # Методы и свойства

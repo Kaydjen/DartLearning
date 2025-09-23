@@ -2,23 +2,24 @@ import 'dart:io';
 import 'dart:convert';
 import '../../01_sys/color.dart';
 import '../../01_sys/console.dart';
-import '../../01_sys/exceptions/console_exeptions/string_exceptions.dart';
-import '../../01_sys/exceptions/result_handler.dart';
 import '../../01_sys/prompt_handler.dart';
+import 'sm2.dart';
 import 'sm2_ui.dart';
 
 class SM2UIValueChanger{
-    static void changeValue(){
-        Map<int, String> map = {
-            0: "${Color.grayDark()} to return back",
-            1: "${Color.grayDark()} to see example",
-            2: "${Color.grayDark()} to see all flashcards",
-            3: "\"name_of_card\" ${Color.grayDark()} to see certain flashcard",
-            4: "${Color.darkRed()}--\"index_of_card\" --question \"new_question\" --answer \"new_answer\""
+    static final Map<int, String> options = {
+            0: "to return back",
+            1: "to see example",
+            2: "to see all flashcards",
+            3: "${Color.darkRed()}--index_of_card ${Color.grayDark()} to see certain flashcard",
+            4: "${Color.darkRed()}--index_of_card --question new_question --answer new_answer"
                 "${Color.grayDark()} to change certain flashcard's value (you can write one value or both)",
         };
-        for (var el in map.entries) 
-            Prompt.printOneLn("${Color.grayDark()}Print ${Color.darkRed()}${el.key} ${el.value}");
+
+    static void changeValue(){
+        Console.clear();
+        for (var el in options.entries) 
+            Prompt.printOneLn("${Color.grayDark()}Print ${Color.darkRed()}${el.key} ${Color.grayDark()}${el.value}");
         print("    ");
 
         while(true){
@@ -29,20 +30,59 @@ class SM2UIValueChanger{
                 break;
             }
             int? strIndex;
-            for (int index in map.keys) if(str.startsWith(index.toString())) strIndex = int.tryParse(str[0]);
-            if(strIndex == null || !map.containsKey(strIndex)){
+            for (int index in options.keys) if(str.startsWith(index.toString())) strIndex = int.tryParse(str[0]);
+            if(strIndex == null || !options.containsKey(strIndex)){
                 _invalidOperation("${Color.red()}Can't find the index. Please enter the index as mentioned above");
                 break;
             }
-            switch(strIndex){
-                case 1: 
-                    SM2UI.mainMenu();
-                    break; 
-                case 2: 
-                    _printExamples();
-                    break; 
+            if(strIndex > 3 && strIndex < 5){ 
+                final res = Prompt.getFlagsFromStr(str);
+                if(!res.isSuccess){
+
+                }
+                   // Map<String, String> newRes = res.value.entries.where((e) => [if()])
+            }
+            else{
+                switch(strIndex){
+                    case 0: 
+                        SM2UI.mainMenu();
+                        break; 
+                    case 1: 
+                        _printExamples();
+                        break; 
+                    case 2:
+                        SM2UI.showAllCards();
+                        break;
+                    case 3:
+                        int idex = str.indexOf("--");
+                        int lIdex = str.lastIndexOf("--"); // last index of the given pattern
+                        str = str.trim();
+                        if(idex  < 0 || idex == lIdex) { // just to be sure there is only One prefix
+                            // todo: make exception for situations when there is more than one prefix or there is no one
+                            continue;
+                        }
+                        final spaceIdex = str.substring(idex+1).trim().indexOf(" ");
+                        if(spaceIdex < 0){ // if there is nothing after index
+                            // todo: make exception for situation when there is nothing after index
+                            continue;
+                        }
+                        final cardIdex = int.tryParse(str.substring(idex+1, spaceIdex).trim());
+                        if(cardIdex == null){
+                            // todo: also make error here, when there is no index after prefix
+                            continue;
+                        }
+                        _showCertainFleshcard(cardIdex);
+                        break;
+                }
             }
         }
+    }
+    static void _showCertainFleshcard(int index){
+        final res = SM2.tryGetCard(index);
+        if(!res.isSuccess) {
+            
+        }
+        SM2UI.printCardContent(res.value!);
     }
     static void _invalidOperation(String reason){
         Prompt.printOneLn(reason);
@@ -54,23 +94,9 @@ class SM2UIValueChanger{
     }
     static void _printExamples(){ 
         Prompt.printOneLn("${Color.grayDark()}To change cart's question just print:");
-        Prompt.printOneLn("${Color.darkRed()}4 ");
-    }
-    static Result<List<String>> getStrList(String str, {String prefix = "--"}){
-        if(!str.contains(prefix)) return Result.fail(NoPrefixFound(str, prefix));
-        List<String> res = List.empty(growable: true);
-        List<int> indexes = List.empty(growable: true);
-        int idex = 0;
-        do{
-            indexes.add(str.indexOf(prefix, (idex > 0 ? indexes[idex-1]+2 : 0)));
-            idex++;
-        }while(str.contains(prefix, indexes[idex-1]+1));
-        idex = 0;
-        do{
-            res.add(str.substring(indexes[idex]+2, (indexes.length <= idex+1 ? str.length : indexes[idex+1])).trimRight());
-            idex++;
-        }while(idex < indexes.length);
-        return Result.ok(res);
+        Prompt.printOneLn("${Color.darkRed()}4 --1 --question Is it tricky? --answer No");
+        Prompt.printOneLn("${Color.grayDark()}Or you can actualy write simplier:");
+        Prompt.printOneLn("${Color.darkRed()}4 -1 -q Is it tricky? -a No");
     }
 }
 

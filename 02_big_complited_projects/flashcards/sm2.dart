@@ -37,6 +37,10 @@ class SM2 {
         if(_dueDate.isEmpty) return false;
         else return true;
     }
+    static Result<Flashcard> tryGetCard(int index){
+        if(_data.length < index) return Result.fail(IndexOutOfRange("_data flashcard", index));
+        else return Result.ok(_data[index]);
+    }
     static void addCard(Flashcard card) => _data.add(card);
     static void saveAllCards() {
         if(!Directory(_pathToData).existsSync()) Directory(_pathToData).create();
@@ -65,7 +69,7 @@ class SM2 {
             _data.add(Flashcard.fromJson(element as Map<String, dynamic>));
     }   
     static Result<Flashcard> tryChangeContent(int index, {String? newQuestion, String? newAnswer}){
-        if(_data.length < index) return Result.fail(IndexOutOfRange("_data", index, SM2));
+        if(_data.length < index) return Result.fail(IndexOutOfRange("_data flashcard", index));
         final card = _data[index];
         if(newQuestion == null && newAnswer == null) return Result.fail(ElementsAreEmpty(["newQuestion", "newAnswer"], SM2));
         if(newQuestion != null) card.question = newQuestion;

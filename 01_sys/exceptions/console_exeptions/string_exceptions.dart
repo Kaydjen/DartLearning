@@ -19,3 +19,13 @@ class NoPrefixFound extends DomainError{
             },
         );
 }
+class FlagsNotFound extends DomainError{
+    FlagsNotFound(String str, String prefix)
+        : super(
+            code: "FLUGS_NOT_FOUND",
+            context: {
+                "str": str,
+                "prefix": prefix,
+             },
+        );
+}

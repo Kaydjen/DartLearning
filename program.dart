@@ -1,15 +1,13 @@
-//import '00_hub_core/menu_system/menu.dart';
-//import '00_hub_core/menu_system/welcome_menu.dart';
+import '00_hub_core/menu_system/menu.dart';
+import '00_hub_core/menu_system/welcome_menu.dart';
+import '01_sys/cli.dart';
 import '01_sys/console.dart';
-import '02_big_complited_projects/flashcards/sm2_ui_value_changer.dart';
-// import '06_cli_economic_simulation/lib/domain/repositories/entity_repo.dart';
 
 void main() {
     Console.setConsoleSize(Console.height, Console.width);
     // WelcomeMenu.showWelcomeMessage();
     // Menu.runMenu(menuTypes.main);  
-    final res = SM2UIValueChanger.getStrList("0123456789 --  --c dd");
-    print(res.value);
+    Cli.setColumn();
 }
 
 /* 

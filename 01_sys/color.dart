@@ -26,11 +26,13 @@ mixin Color{
     static String brightWhite() => "\u001b[38;5;15m";
 
     // additional gray colors
+    static String darkGray() => "\u001b[38;5;236m";
     static String grayDark() => "\u001b[38;5;240m";
     static String gray() => "\u001b[38;5;245m";
     static String grayWhite() => "\u001b[38;5;250m";
 
     // background colors
+    static String bgdarkGray() => "\u001b[48;5;234m";
     static String bgBlack() => "\u001b[48;5;0m";
     static String bgRed() => "\u001b[48;5;1m";
     static String bgGreen() => "\u001b[48;5;2m";
