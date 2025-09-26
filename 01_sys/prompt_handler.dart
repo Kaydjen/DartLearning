@@ -14,10 +14,7 @@ class Prompt {
     static void printLns(List<String> list){
         
     }
-    static int visibleLength(String input) {
-        final ansiEscape = RegExp(r'\x1B\[[0-9;]*[a-zA-Z]');
-        return input.replaceAll(ansiEscape, '').length;
-    }
+    static int visibleLength(String input) => input.replaceAll(RegExp(r'\x1B\[[0-9;]*[a-zA-Z]'), '').length;
     static void invalidInput({String errorMessage = "Please, enter proper input value ", String tipMessage = "",  int countOfLinesToClear = 3}){ // todo: polish of
         stdout.write(Color.set(ColorTypes.red, str: "$errorMessage ${Color.grayWhite}\nRestarting"));
         for (var i = 0; i < 3; i++) {

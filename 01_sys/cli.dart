@@ -45,7 +45,7 @@ class Cli {
          
         int maxLen = 0;
         for (var el in map.values) {
-          maxLen = max(maxLen, max(el.descLenght+textIndDesc, el.optLenght+textIndOpt));
+          maxLen = max(maxLen, max(el.descLenght+textIndDesc+4, el.optLenght+textIndOpt+4));
         }
 
         final int value = Console.width - maxLen;
@@ -71,6 +71,14 @@ class Cli {
             _mbmWidthL = (mbmW/2).round();
             _mbmWidthR = _mbmWidthL-1;
         }
+        print(maxLen);
+        print("Console.width: " + Console.width.toString());
+        print("lWidth: " + _lWidth.toString());
+        print("rWidth: " + _rWidth.toString());
+        print("mWidth: " + _mWidth.toString());
+        print("mmWidth: " + _mmWidth.toString());
+        print("mbmWidthL: " + _mbmWidthL.toString());
+        print("mbmWidthR: " + _mbmWidthR.toString());
 
         // TOP
         _printLn(crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
