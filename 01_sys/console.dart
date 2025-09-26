@@ -1,10 +1,22 @@
 import 'dart:io';
 
 class Console{
-    static final int height = 31;
-    static final int width = 75;
+    static const int heightInit = 31;
+    static const int widthInit = 75;
+    static int _height = heightInit;
+    static int _width = heightInit;
 
-    static void setConsoleSize(int height, int width) => stdout.write('\x1B[8;${height};${width}t');
+    static int get height => _height;
+    static int get width => _width;
+
+    static void setConsoleSize({int? height, int? width = widthInit}) {
+        height ??= _height;
+        width ??= _width;
+        stdout.write('\x1B[8;${height};${width}t');
+        print("CONSOLE");
+        _height = height;
+        _width = width;
+    }
     static void placeCursor(int row, [int column = 0]) => stdout.write('\x1B[${row};${column}H');
 
     static void clear() => print('\x1B[2J\x1B[0;0H');

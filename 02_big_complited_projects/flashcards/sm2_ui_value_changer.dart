@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import '../../01_sys/cli.dart';
 import '../../01_sys/color.dart';
 import '../../01_sys/console.dart';
 import '../../01_sys/prompt_handler.dart';
@@ -7,21 +8,37 @@ import 'sm2.dart';
 import 'sm2_ui.dart';
 
 class SM2UIValueChanger{
-    static final Map<int, String> options = {
-            0: "to return back",
-            1: "to see example",
-            2: "to see all flashcards",
-            3: "${Color.darkRed()}--index_of_card ${Color.grayDark()} to see certain flashcard",
-            4: "${Color.darkRed()}--index_of_card --question new_question --answer new_answer"
-                "${Color.grayDark()} to change certain flashcard's value (you can write one value or both)",
+    static final Map<int, CliOptions> options = {
+            1: CliOptions(
+                des: "to return back",
+                opt: ""
+            ),
+            2: CliOptions(
+                des: "to see all flashcards",
+                opt: ""
+            ),
+            3: CliOptions(
+                des: "to see certain flashcard",
+                opt: "--index_of_card"
+            ),
+            4: CliOptions(
+                des: "to change certain flashcard's ",
+                opt: "--index_of_card --question new"
+            ),
+            // 4: CliOptions(
+            //     des: "to change certain flashcard's value (you can write one value or both)",
+            //     opt: "--index_of_card --question new_question --answer new_answer"
+            // ),
         };
 
     static void changeValue(){
         Console.clear();
-        for (var el in options.entries) 
-            Prompt.printOneLn("${Color.grayDark()}Print ${Color.darkRed()}${el.key} ${Color.grayDark()}${el.value}");
-        print("    ");
+        // for (var el in options.entries) 
+        //     Prompt.printOneLn("${Color.grayDark()}Print ${Color.darkRed()}${el.key} ${Color.grayDark()}${el.value}");
+        // print("    ");
+        Cli.setColumn(options, doFitBC: true);
 
+        return;
         while(true){
             Color.red();
             String? str = stdin.readLineSync(encoding: utf8)?.trim();

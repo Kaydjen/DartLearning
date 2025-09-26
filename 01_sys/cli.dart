@@ -1,27 +1,72 @@
+import 'dart:math';
+
 import 'color.dart';
 import 'console.dart';
 import 'prompt_handler.dart';
 
+/// This code is shit, and I have no idea what to do with it (I simply forgot what i wrote there). So, todo: rewrite
+
 class Cli {
-    static int lWidth = 0; 
-    static int rWidth = 0;
-    static int mmWidth = 0;
-    static int mbmWidth = 0; 
-    static int mWidth = 0; 
-    static void setColumn(/* Map<int, CliOptions> map */){
+    static int lWidth = 0; // left column width
+    static int rWidth = 0; // right column width
+    static int mmWidth = 0; // middle-middle column width
+    static int mbmWidthR = 0; // middle between middle column width Left
+    static int mbmWidthL = 0; // middle between middle column width Right
+    static int mWidth = 0; // whole middle column width 
+    static final int minBCWidth = 3;
+    /// [doSetTMC] - do set top-middle column 
+    static void setColumn(
+        Map<int, CliOptions> map, 
+        {
+            String lbcStr = "◊",
+            String rbcStr = "◊",
+            String mbcStr = "¯\\(0-0)/¯",
+            bool doSetTMC = true, 
+            int lbcWidth = 7, 
+            int rbcWidth = 7,
+            bool doFitBC = true,
+            int topBorder = 1,
+            int bottomBorder = 1,
+            int textIndDesc = 2,
+            int textIndOpt = 4,
+        }){
+        lbcWidth = max(3, lbcWidth);
+        rbcWidth = max(3, rbcWidth);
         Console.clear();
         Console.placeCursor(1);
-        // перебрать весь масив и вычислить среднее значение int, если оно равно 1 или не парное - то левая и правая шырины должны быть не парными,
-        // а если среднее будет выше 1 и парное - то и ширины должны быть парными 
-        lWidth = 9-2; // left column width
-        rWidth = 9-2; // right column width
-        mmWidth = 15-2; // middle-middle column width
-        mbmWidth = Console.width-lWidth-rWidth-mmWidth-6; // middle between middle column width
-        mWidth = Console.width-lWidth-rWidth-4; // whole middle column width                             
+         
+        int maxLen = 0;
+        for (var el in map.values) {
+          maxLen = max(maxLen, max(el.descLenght+textIndDesc, el.optLenght+textIndOpt));
+        }
+
+        final int value = Console.width - maxLen;
+        if (maxLen < Console.width - lbcWidth - rbcWidth) {
+            lWidth = lbcWidth;
+            rWidth = rbcWidth;
+        } else if (doFitBC && value >= minBCWidth * 2) {
+            lWidth = rWidth = (value ~/ 2);
+        } else {
+            Console.setConsoleSize(width: maxLen + lbcWidth + rbcWidth);
+            lWidth = lbcWidth;
+            rWidth = rbcWidth;
+        }
+        _countMWidth();
+        mmWidth = _length(mbcStr)+2;
+        if(mmWidth>mWidth){
+            Console.setConsoleSize(width: Console.width+(mmWidth-mWidth)+2);
+            _countMWidth();
+        }
         
+        final int mbmW = mWidth - mmWidth-2;
+        if(mbmW.isOdd) {
+            mbmWidthL = (mbmW/2).round();
+            mbmWidthR = mbmWidthL-1;
+        }
+
         // TOP
         _printLn(crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
-        _print("◊", _middleText("◊◊"), "◊", mPl: (mbmWidth/2).toInt());
+        _print(lStr: lbcStr,mStr:  "│"+_pad(mmWidth, mbcStr)+"│",rStr: rbcStr, mPl: mbmWidthL);
         _printLn(crl: "└", cnl: "┘", hlm: " ", cnml: "└", cnmr: "┘", hrm: " ", cnr: "└", crr: "┘");
 
         // MIDDLE-TOP
@@ -29,22 +74,42 @@ class Cli {
         //_printLn(crl: "┌", cnl: "┐",  cnml: "─", cnmr: "─", cnr: "┌", crr: "┐");
 
         // MIDDLE
-        _print("◊", "", "◊", mPl: (mbmWidth/2).toInt());
+        if((Console.height-map.length-5-topBorder-bottomBorder) < 0){
+            Console.setConsoleSize(height: map.length+5+topBorder+bottomBorder);
+        }
+        for (var el in map.entries) {
+            _print(mPl: textIndDesc, lStr: el.key.toString(), mStr: el.value.des);
+            _print(mPl: textIndOpt, mStr: el.value.opt);
+        }
 
         // MIDDLE-DOWN
         //_printLn(crl: "└", cnl: "┘",  cnml: "─", cnmr: "─", cnr: "└", crr: "┘");
         _printLn(crl: "└", cnl: "┴",  cnml: "─", cnmr: "─", cnr: "┴", crr: "┘");
     }
-    static void _print(String lStr, String mStr, String rStr, {int mPl = 2, String vl = "│"}){  // mPl - middle padding from left, vl vertical line Symbol
-        int lP = ((lWidth - _length(lStr)) / 2).toInt(); // left text padding
-        int rP = ((rWidth - _length(rStr)) / 2).toInt(); // right text padding
-        int mPr =  mWidth - _length(mStr) - mPl; // mPr - middle padding from right 
+    static void _countMWidth(){
+        mWidth = Console.width-lWidth-rWidth-4;
+        if (mWidth.isOdd) {
+          mWidth++;
+          Console.setConsoleSize(width: Console.width + 1);
+        }
+    }
+    static void _print({String lStr = "", String mStr = "", String rStr = "", int mPl = 2, String vl = "│"}) {
+        final int mPr = mWidth - _length(mStr) - mPl;
         print(
-            vl + " "*lP + lStr + " "*lP + vl
-            + " "*mPl + mStr + " "*mPr
-            + vl + " "*rP + (rStr.length == 0 ? " " : rStr) + " "*rP + vl);
+            vl + _pad(lWidth, lStr) + vl
+            + " " * mPl + mStr + " " * mPr
+            + vl + _pad(rWidth, rStr) + vl
+        );
+    }
+    static String _pad(int width, String str) {
+        int len = _length(str);
+        int p = ((width - len) / 2).round();
+        return " " * p + str + " " * (width - len - p);
     }
     /// Prints a formatted line with customizable symbols and connectors.
+    /// 
+    /// !WARNING!
+    /// Don't forget, this is only for printing top and down lines, also for printing three boxes. 
     ///
     /// crl hl cnl hlm cnml hmm cnmr hrm cnr hr crr
     /// 
@@ -82,58 +147,96 @@ class Cli {
         String hr = "─",
         String crr = "┘",
     }) {
-        int mWidth = (mbmWidth / 2).toInt(); // middle width
         print(Color.darkGray()
         + crl + hl*lWidth + cnl
-        + hlm*mWidth
+        + hlm*mbmWidthL
         + cnml + hmm*mmWidth + cnmr
-        + hrm*mWidth
+        + hrm*mbmWidthR
         + cnr + hr*rWidth + crr);
-    }
-    // /// Prints a formatted line with customizable symbols and connectors.
-    // ///
-    // /// Parameters:
-    // /// - [l]: left symbol (default: "└")
-    // /// - [c]: left connector (default: "┴")
-    // /// - [h]: middle-horizontal symbol (default: "─")
-    // /// - [r]: right symbol (default: "┘")
-    // static void _printLn({
-    //     String l = "└",
-    //     String c = "┴",
-    //     String h = "─", 
-    //     String r = "┘",
-    // }) {
-    //     print(Color.darkGray()
-    //     + l + h * lWidth + c 
-    //     + h * (mbmWidth / 2).round()
-    //     + c + h * mmWidth + c
-    //     + h * (mbmWidth / 2).round()
-    //     + c + h * rWidth + r);
-    // }
-    static String _middleText(String str){
-        int p = ((mmWidth-_length(str))/2).toInt();
-        return "│"+ " "*((p%2 != 0) ? p+1:p) + (str.length == 0 ? " " : str) + " "*p + "│";
     }
     static int _length(String input) => input.replaceAll(RegExp(r'\x1B\[[0-9;]*[a-zA-Z]'), '').length;
 }
 
-class Sm{
-    static final String bL = '└'; // bottom left
-    static final String bC = '┴';
-    static final String bR = '┘';
-    static final String h = '─'; // horisontal
-    static final String tL = '┌'; // top left
-    static final String tC = '┬';
-    static final String tR = '┐';
-}
-
-
-
 class CliOptions{
-    final String description;
-    final String option;
-    CliOptions(this.description, this.option);
+    final String des;
+    final String opt;
+    CliOptions({required this.des, required this.opt});
 
-    int get descLenght => Prompt.visibleLength(description);
-    int get optLenght => Prompt.visibleLength(option);
+    int get descLenght => Prompt.visibleLength(des);
+    int get optLenght => Prompt.visibleLength(opt);
 }
+
+
+/*
+        final int lSL = _length(lStr);
+        if((lWidth.isEven && lSL.isEven) || (lWidth.isOdd && lSL.isOdd)){
+            final double lwp = (lWidth - lSL)/2;
+            lP = lPr = lwp.toInt();
+        }
+        else if((lWidth.isEven && lSL.isOdd) || (lWidth.isOdd && lSL.isEven)){
+            final int lwp = ((lWidth - lSL)/2).round();
+            lP = lwp;
+            lPr = lwp-1;
+        }   
+        final int rSL = _length(rStr);
+        if((rWidth.isEven && rSL.isEven) || (rWidth.isOdd && rSL.isOdd)){
+            final double rwp = (rWidth - rSL)/2;
+            rP = rPr = rwp.toInt();
+        }
+        else if((rWidth.isEven && rSL.isOdd) || (rWidth.isOdd && rSL.isEven)){
+            final int rwp = ((rWidth - rSL)/2).round();
+            rP = rwp;
+            rPr = rwp-1;
+        }   
+
+
+*/ 
+
+
+        // if(maxLenght < curConWidth-lbcWidth-rbcWidth){ 
+        //     lWidth = lbcWidth;
+        //     rWidth = rbcWidth;
+        // } 
+        // else if(doFitBC) {
+        //     if(curConWidth > maxLenght){
+        //         final int value = curConWidth - maxLenght;
+        //         if(value>=minBCWidth*2){
+        //             final int newWidth = (value%2 == 0 ? value/2 : (value-1)/2).toInt();
+        //             lWidth = newWidth;
+        //             rWidth = newWidth;
+        //         }
+        //         else{
+        //             Console.setConsoleSize(width: maxLenght+lbcWidth+rbcWidth);
+        //             lWidth = lbcWidth;
+        //             rWidth = rbcWidth;
+                    
+        //         }
+        //     }
+        //     else{
+        //         Console.setConsoleSize(width: maxLenght+lbcWidth+rbcWidth);
+        //         lWidth = lbcWidth;
+        //         rWidth = rbcWidth;
+        //         curConWidth = Console.width;
+        //     }
+        // }
+        // else{
+        //     Console.setConsoleSize(width: maxLenght+lbcWidth+rbcWidth);
+        //     lWidth = lbcWidth;
+        //     rWidth = rbcWidth;
+        //     curConWidth = Console.width;
+        // }
+
+
+        /* 
+        
+        
+                print("Console.width: " + Console.width.toString());
+        print("lWidth: " + lWidth.toString());
+        print("rWidth: " + rWidth.toString());
+        print("mWidth: " + mWidth.toString());
+        print("mmWidth: " + mmWidth.toString());
+        print("mbmWidthL: " + mbmWidthL.toString());
+        print("mbmWidthR: " + mbmWidthR.toString());
+        
+        
+         */

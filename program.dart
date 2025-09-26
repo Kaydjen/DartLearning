@@ -4,10 +4,9 @@ import '01_sys/cli.dart';
 import '01_sys/console.dart';
 
 void main() {
-    Console.setConsoleSize(Console.height, Console.width);
-    // WelcomeMenu.showWelcomeMessage();
-    // Menu.runMenu(menuTypes.main);  
-    Cli.setColumn();
+    Console.setConsoleSize(height: Console.heightInit, width: Console.widthInit);
+    WelcomeMenu.showWelcomeMessage();
+    Menu.runMenu(menuTypes.main);  
 }
 
 /* 
