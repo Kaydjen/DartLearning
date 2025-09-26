@@ -93,13 +93,19 @@ class SM2UIValueChanger{
         }
         SM2UI.printCardContent(res.value!);
         stdin.readLineSync();
-        run();
     }
     static void _printExamples(){ 
         Prompt.printOneLn("${Color.grayDark}To change cart's question just print:");
         Prompt.printOneLn("${Color.darkRed}4 --1 --question Is it tricky? --answer No");
         Prompt.printOneLn("${Color.grayDark}Or you can actualy write simplier:");
         Prompt.printOneLn("${Color.darkRed}4 -1 -q Is it tricky? -a No");
+        _pressToContinue();
+    }
+    static void _pressToContinue(){
+        print("");
+        Prompt.printOneLn(Color.grayDark + "Press something to continue back.");
+        stdin.readLineSync();
+        run();
     }
 }
 

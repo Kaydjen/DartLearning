@@ -71,14 +71,6 @@ class Cli {
             _mbmWidthL = (mbmW/2).round();
             _mbmWidthR = _mbmWidthL-1;
         }
-        print(maxLen);
-        print("Console.width: " + Console.width.toString());
-        print("lWidth: " + _lWidth.toString());
-        print("rWidth: " + _rWidth.toString());
-        print("mWidth: " + _mWidth.toString());
-        print("mmWidth: " + _mmWidth.toString());
-        print("mbmWidthL: " + _mbmWidthL.toString());
-        print("mbmWidthR: " + _mbmWidthR.toString());
 
         // TOP
         _printLn(crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
@@ -247,13 +239,14 @@ class CliOptions{
         /* 
         
         
-                print("Console.width: " + Console.width.toString());
-        print("lWidth: " + lWidth.toString());
-        print("rWidth: " + rWidth.toString());
-        print("mWidth: " + mWidth.toString());
-        print("mmWidth: " + mmWidth.toString());
-        print("mbmWidthL: " + mbmWidthL.toString());
-        print("mbmWidthR: " + mbmWidthR.toString());
+        print("maxLen: " + maxLen.toString);
+        print("Console.width: " + Console.width.toString());
+        print("lWidth: " + _lWidth.toString());
+        print("rWidth: " + _rWidth.toString());
+        print("mWidth: " + _mWidth.toString());
+        print("mmWidth: " + _mmWidth.toString());
+        print("mbmWidthL: " + _mbmWidthL.toString());
+        print("mbmWidthR: " + _mbmWidthR.toString());
         
         
          */

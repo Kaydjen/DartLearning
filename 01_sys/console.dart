@@ -13,7 +13,6 @@ class Console{
         height ??= _height;
         width ??= _width;
         stdout.write('\x1B[8;${height};${width}t');
-        print("CONSOLE");
         _height = height;
         _width = width;
     }
