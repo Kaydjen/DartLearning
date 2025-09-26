@@ -1,19 +1,19 @@
 import 'dart:math';
-
 import 'color.dart';
 import 'console.dart';
 import 'prompt_handler.dart';
 
-/// This code is shit, and I have no idea what to do with it (I simply forgot what i wrote there). So, todo: rewrite
-
+/// i know, i know. It's better to write there contractor and not static methods... but, who gives a shit
+///
 class Cli {
-    static int lWidth = 0; // left column width
-    static int rWidth = 0; // right column width
-    static int mmWidth = 0; // middle-middle column width
-    static int mbmWidthR = 0; // middle between middle column width Left
-    static int mbmWidthL = 0; // middle between middle column width Right
-    static int mWidth = 0; // whole middle column width 
-    static final int minBCWidth = 3;
+    static int _lWidth = 0; // left column width
+    static int _rWidth = 0; // right column width
+    static int _mmWidth = 0; // middle-middle column width
+    static int _mbmWidthR = 0; // middle between middle column width Left
+    static int _mbmWidthL = 0; // middle between middle column width Right
+    static int _mWidth = 0; // whole middle column width 
+    static String _colorOutline = Color.darkGray;
+    static const int _minBCWidth = 3;
     /// [doSetTMC] - do set top-middle column 
     static void setColumn(
         Map<int, CliOptions> map, 
@@ -29,7 +29,15 @@ class Cli {
             int bottomBorder = 1,
             int textIndDesc = 2,
             int textIndOpt = 4,
+            String colorOutline = Color.darkGray,
+            String colorTextDesc = Color.grayDark,
+            String colorTextOpt = Color.darkRed,
+            String colorTextNum = Color.darkRed,
+            String colorLBC = Color.grayDark,
+            String colorRBC = Color.grayDark,
+            String colorMBC = Color.grayDark,
         }){
+        _colorOutline = colorOutline;
         lbcWidth = max(3, lbcWidth);
         rbcWidth = max(3, rbcWidth);
         Console.clear();
@@ -42,31 +50,31 @@ class Cli {
 
         final int value = Console.width - maxLen;
         if (maxLen < Console.width - lbcWidth - rbcWidth) {
-            lWidth = lbcWidth;
-            rWidth = rbcWidth;
-        } else if (doFitBC && value >= minBCWidth * 2) {
-            lWidth = rWidth = (value ~/ 2);
+            _lWidth = lbcWidth;
+            _rWidth = rbcWidth;
+        } else if (doFitBC && value >= _minBCWidth * 2) {
+            _lWidth = _rWidth = (value ~/ 2);
         } else {
             Console.setConsoleSize(width: maxLen + lbcWidth + rbcWidth);
-            lWidth = lbcWidth;
-            rWidth = rbcWidth;
+            _lWidth = lbcWidth;
+            _rWidth = rbcWidth;
         }
         _countMWidth();
-        mmWidth = _length(mbcStr)+2;
-        if(mmWidth>mWidth){
-            Console.setConsoleSize(width: Console.width+(mmWidth-mWidth)+2);
+        _mmWidth = _length(mbcStr)+2;
+        if(_mmWidth>_mWidth){
+            Console.setConsoleSize(width: Console.width+(_mmWidth-_mWidth)+2);
             _countMWidth();
         }
         
-        final int mbmW = mWidth - mmWidth-2;
+        final int mbmW = _mWidth - _mmWidth-2;
         if(mbmW.isOdd) {
-            mbmWidthL = (mbmW/2).round();
-            mbmWidthR = mbmWidthL-1;
+            _mbmWidthL = (mbmW/2).round();
+            _mbmWidthR = _mbmWidthL-1;
         }
 
         // TOP
         _printLn(crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
-        _print(lStr: lbcStr,mStr:  "│"+_pad(mmWidth, mbcStr)+"│",rStr: rbcStr, mPl: mbmWidthL);
+        _print(lStr: colorLBC+lbcStr, mStr:  "│"+colorMBC+_pad(_mmWidth, mbcStr)+_colorOutline+"│",rStr: colorRBC+rbcStr, mPl: _mbmWidthL);
         _printLn(crl: "└", cnl: "┘", hlm: " ", cnml: "└", cnmr: "┘", hrm: " ", cnr: "└", crr: "┘");
 
         // MIDDLE-TOP
@@ -78,8 +86,8 @@ class Cli {
             Console.setConsoleSize(height: map.length+5+topBorder+bottomBorder);
         }
         for (var el in map.entries) {
-            _print(mPl: textIndDesc, lStr: el.key.toString(), mStr: el.value.des);
-            _print(mPl: textIndOpt, mStr: el.value.opt);
+            _print(mPl: textIndDesc, lStr: colorTextNum + el.key.toString(), mStr: colorTextDesc + el.value.des);
+            _print(mPl: textIndOpt, mStr: colorTextOpt + el.value.opt);
         }
 
         // MIDDLE-DOWN
@@ -87,18 +95,19 @@ class Cli {
         _printLn(crl: "└", cnl: "┴",  cnml: "─", cnmr: "─", cnr: "┴", crr: "┘");
     }
     static void _countMWidth(){
-        mWidth = Console.width-lWidth-rWidth-4;
-        if (mWidth.isOdd) {
-          mWidth++;
+        _mWidth = Console.width-_lWidth-_rWidth-4;
+        if (_mWidth.isOdd) {
+          _mWidth++;
           Console.setConsoleSize(width: Console.width + 1);
         }
     }
     static void _print({String lStr = "", String mStr = "", String rStr = "", int mPl = 2, String vl = "│"}) {
-        final int mPr = mWidth - _length(mStr) - mPl;
-        print(
-            vl + _pad(lWidth, lStr) + vl
-            + " " * mPl + mStr + " " * mPr
-            + vl + _pad(rWidth, rStr) + vl
+        final int mPr = _mWidth - _length(mStr) - mPl;
+        vl = _colorOutline+vl;
+        print( 
+            vl + _pad(_lWidth, lStr) + vl
+            + " "*mPl + mStr + " "*mPr 
+            + vl + _pad(_rWidth, rStr) + vl
         );
     }
     static String _pad(int width, String str) {
@@ -147,12 +156,12 @@ class Cli {
         String hr = "─",
         String crr = "┘",
     }) {
-        print(Color.darkGray()
-        + crl + hl*lWidth + cnl
-        + hlm*mbmWidthL
-        + cnml + hmm*mmWidth + cnmr
-        + hrm*mbmWidthR
-        + cnr + hr*rWidth + crr);
+        print(_colorOutline
+        + crl + hl*_lWidth + cnl
+        + hlm*_mbmWidthL
+        + cnml + hmm*_mmWidth + cnmr
+        + hrm*_mbmWidthR
+        + cnr + hr*_rWidth + crr);
     }
     static int _length(String input) => input.replaceAll(RegExp(r'\x1B\[[0-9;]*[a-zA-Z]'), '').length;
 }

@@ -22,35 +22,27 @@ class SM2UIValueChanger{
                 opt: "--index_of_card"
             ),
             4: CliOptions(
-                des: "to change certain flashcard's ",
-                opt: "--index_of_card --question new"
+                des: "to change certain flashcard's value (you can write one value or both)",
+                opt: "--index_of_card --question new_question --answer new_answer"
             ),
-            // 4: CliOptions(
-            //     des: "to change certain flashcard's value (you can write one value or both)",
-            //     opt: "--index_of_card --question new_question --answer new_answer"
-            // ),
         };
 
-    static void changeValue(){
+    static void run(){
         Console.clear();
-        // for (var el in options.entries) 
-        //     Prompt.printOneLn("${Color.grayDark()}Print ${Color.darkRed()}${el.key} ${Color.grayDark()}${el.value}");
-        // print("    ");
         Cli.setColumn(options, doFitBC: true);
 
-        return;
         while(true){
-            Color.red();
+            stdout.write(Color.red);
             String? str = stdin.readLineSync(encoding: utf8)?.trim();
             if(str == null){
-                _invalidOperation("${Color.red()}Empty line, please, enter proper value");
-                break;
+                Prompt.invalidInput(errorMessage: "Empty line, please, enter proper value");
+                continue;
             }
             int? strIndex;
             for (int index in options.keys) if(str.startsWith(index.toString())) strIndex = int.tryParse(str[0]);
             if(strIndex == null || !options.containsKey(strIndex)){
-                _invalidOperation("${Color.red()}Can't find the index. Please enter the index as mentioned above");
-                break;
+                Prompt.invalidInput(errorMessage: "Can't find the index. Please enter the index as mentioned above");
+                continue;
             }
             if(strIndex > 3 && strIndex < 5){ 
                 final res = Prompt.getFlagsFromStr(str);
@@ -100,20 +92,14 @@ class SM2UIValueChanger{
             
         }
         SM2UI.printCardContent(res.value!);
-    }
-    static void _invalidOperation(String reason){
-        Prompt.printOneLn(reason);
-        for (var i = 0; i < 3; i++) {
-            stdout.write('.');
-            sleep(Duration(milliseconds: 750));
-        }
-        Console.clearPreviousLines(1);
+        stdin.readLineSync();
+        run();
     }
     static void _printExamples(){ 
-        Prompt.printOneLn("${Color.grayDark()}To change cart's question just print:");
-        Prompt.printOneLn("${Color.darkRed()}4 --1 --question Is it tricky? --answer No");
-        Prompt.printOneLn("${Color.grayDark()}Or you can actualy write simplier:");
-        Prompt.printOneLn("${Color.darkRed()}4 -1 -q Is it tricky? -a No");
+        Prompt.printOneLn("${Color.grayDark}To change cart's question just print:");
+        Prompt.printOneLn("${Color.darkRed}4 --1 --question Is it tricky? --answer No");
+        Prompt.printOneLn("${Color.grayDark}Or you can actualy write simplier:");
+        Prompt.printOneLn("${Color.darkRed}4 -1 -q Is it tricky? -a No");
     }
 }
 

@@ -9,7 +9,7 @@ class WelcomeMenu {
       Menu.runMenu(menuTypes.main);
   }
   static void showWelcomeMessage() async {
-    Color.reset();
+    Color.reset;
     // print logo line by line with delay
     for (String el in VisualTextElements.mainWelcomeLogo.split('|')) {
       stdout.write(el);

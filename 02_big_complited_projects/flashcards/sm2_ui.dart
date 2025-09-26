@@ -34,7 +34,7 @@ class SM2UI{
         ),
         5: ChoosableOptions(
             "Additional options (development...)",
-            SM2UIValueChanger.changeValue
+            SM2UIValueChanger.run
         ),
     };
     static bool isFirstStart = false;
@@ -52,19 +52,19 @@ class SM2UI{
         while(true){
             final card = SM2.getClosestReviewCard();
             if(card == null){
-                print("${Color.red()}There is nothing to review today");
+                print("${Color.red}There is nothing to review today");
                 mainMenu();
                 return;
             }
-            print("${Color.darkRed()}Question: ${Color.reset()}${card.question}");
+            print("${Color.darkRed}Question: ${Color.reset}${card.question}");
             stdout.write(
-            "${Color.grayDark()}Press "
-            "${Color.brightCyan()}Enter "
-            "${Color.grayDark()}to see the resault: ");
+            "${Color.grayDark}Press "
+            "${Color.brightCyan}Enter "
+            "${Color.grayDark}to see the resault: ");
             stdin.readLineSync();
             Console.clearPreviousLines(2);
-            stdout.write("${Color.green()}Answer: ${Color.reset()}${card.answer}");
-            final quolity = Prompt.validateIntDouble("\n${Color.grayDark()}Enter your update review quality: ", 
+            stdout.write("${Color.green}Answer: ${Color.reset}${card.answer}");
+            final quolity = Prompt.validateIntDouble("\n${Color.grayDark}Enter your update review quality: ", 
             onStringCheck: (input) {
                 if(input.contains("*") && input.length == 1){
                     _backToMenu();
@@ -127,7 +127,7 @@ class SM2UI{
             Prompt.printOneLn("\n${Color.set(ColorTypes.red, str: "NextReviewDate")}: ${Color.set(ColorTypes.def, str: (card.nextReviewDate.toString()))} \n");
     }
     static void _backToMenu(){
-        Prompt.prompt("\n${Color.reset()}Press ${Color.brightCyan()}Enter${Color.reset()} to go to main menu: ");
+        Prompt.prompt("\n${Color.reset}Press ${Color.brightCyan}Enter${Color.reset} to go to main menu: ");
         mainMenu();
     }
 }

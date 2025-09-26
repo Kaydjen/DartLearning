@@ -19,9 +19,9 @@ class Prompt {
         return input.replaceAll(ansiEscape, '').length;
     }
     static void invalidInput({String errorMessage = "Please, enter proper input value ", String tipMessage = "",  int countOfLinesToClear = 3}){ // todo: polish of
-        stdout.write(Color.set(ColorTypes.red, str: "$errorMessage ${Color.grayWhite()}\nRestarting"));
+        stdout.write(Color.set(ColorTypes.red, str: "$errorMessage ${Color.grayWhite}\nRestarting"));
         for (var i = 0; i < 3; i++) {
-            stdout.write('${Color.grayWhite()}.');
+            stdout.write('${Color.grayWhite}.');
             sleep(Duration(milliseconds: 750));
         }
         sleep(Duration(milliseconds: 100));

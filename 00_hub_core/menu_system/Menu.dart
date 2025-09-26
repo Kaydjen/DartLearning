@@ -74,7 +74,7 @@ class Menu {
         runMenu(menu);
     }
     static void invalidInput(menuTypes menu){
-        Color.red();
+        Color.red;
         Prompt.invalidInput();
         runMenu(menu);
     }

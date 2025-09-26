@@ -19,7 +19,7 @@ import '../01_sys/prompt_handler.dart';
 class WordFrequency{
     static void run(){
         Console.clear();
-        Color.red();
+        Color.red;
         Console.placeCursor((Console.height/2).toInt());
         stdin.echoMode = true; 
         print("  Please, enter text");
