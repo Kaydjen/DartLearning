@@ -1,6 +1,5 @@
 import '00_hub_core/menu_system/menu.dart';
 import '00_hub_core/menu_system/welcome_menu.dart';
-import '01_sys/cli.dart';
 import '01_sys/console.dart';
 
 void main() {
@@ -9,6 +8,125 @@ void main() {
     Menu.runMenu(menuTypes.main);  
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+
+class Solution {
+    int lengthOfLongestSubstring(String s) {
+        var map = Map<String, bool>();
+        for (int i = 0; i < s.length; i++) {
+            if(map.containsKey(s[i])) map.clear();
+            else map[s[i]];
+
+        }
+    }
+}
+
+
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+class ListNode {
+  int val;
+  ListNode? next;
+  ListNode([this.val = 0, this.next]);
+}
+
+class Solution {
+    ListNode? addTwoNumbers(ListNode? l1, ListNode? l2) {
+        ListNode? res = ListNode(0);
+        ListNode? temp = res;
+        int fallback = 0;
+        int n;
+        do{
+            n = (l1?.val ?? 0) + (l2?.val ?? 0) + fallback;
+            if(n>=10){
+                n = n-10;
+                fallback=1;
+            }
+            else {
+                fallback = 0;
+            }            
+            temp!.val = n;
+            l1 = l1?.next;
+            l2 = l2?.next;    
+            if(l1==null||l2==null){
+                if(fallback != 0){
+                    temp.next = ListNode(fallback);
+                    temp = temp.next;
+                }
+                return res;
+            }
+            temp.next = ListNode(0);
+            temp = temp.next;
+        }while(true);
+    }
+}
+ */
+/* 
+class Solution {
+    static List<int> twoSum(List<int> nums, int target) {
+        var map = Map<int,int>();
+        for (var i = 0; i < nums.length; i++) {
+            int temp = target-nums[i];
+            if(map.containsKey(temp)){
+                return [map[temp]!, i];
+            }
+            map[nums[i]] = i;
+        }
+        return [];
+    }
+} */
 /* 
 
 961002FAB836819B599E770AA25FF02BFF1697D1D051140062066A5FF47D6712
@@ -24,7 +142,6 @@ void main() {
     changed: ...
 
  */
-
 
    // Console.setConsoleSize(Console.height, Console.width);
    // WelcomeMenu.showWelcomeMessage();

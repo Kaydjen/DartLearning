@@ -16,8 +16,9 @@ class Console{
         _height = height;
         _width = width;
     }
-    static void placeCursor(int row, [int column = 0]) => stdout.write('\x1B[${row};${column}H');
-
+    static void placeCursor(int row, {int column = 0}) => stdout.write('\x1B[${row};${column}H');
+    /// Place cursor in center of the line
+    static void placeCCenter() => stdout.write('\x1B[${(Console.width/2).round()}G');
     static void clear() => print('\x1B[2J\x1B[0;0H');
     static void clearPreviousLines(int count) {
         stdout.write('\x1B[2K');

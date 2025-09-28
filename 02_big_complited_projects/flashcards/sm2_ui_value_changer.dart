@@ -9,8 +9,12 @@ import 'sm2_ui.dart';
 
 class SM2UIValueChanger{
     static final Map<int, CliOptions> options = {
-            1: CliOptions(
+            0: CliOptions(
                 des: "to return back",
+                opt: ""
+            ),
+            1: CliOptions(
+                des: "to see examples",
                 opt: ""
             ),
             2: CliOptions(
@@ -33,6 +37,7 @@ class SM2UIValueChanger{
 
         while(true){
             stdout.write(Color.red);
+            Console.placeCCenter();
             String? str = stdin.readLineSync(encoding: utf8)?.trim();
             if(str == null){
                 Prompt.invalidInput(errorMessage: "Empty line, please, enter proper value");
@@ -95,6 +100,8 @@ class SM2UIValueChanger{
         stdin.readLineSync();
     }
     static void _printExamples(){ 
+        Console.clearPreviousLines(2);
+        print("");
         Prompt.printOneLn("${Color.grayDark}To change cart's question just print:");
         Prompt.printOneLn("${Color.darkRed}4 --1 --question Is it tricky? --answer No");
         Prompt.printOneLn("${Color.grayDark}Or you can actualy write simplier:");
@@ -104,6 +111,7 @@ class SM2UIValueChanger{
     static void _pressToContinue(){
         print("");
         Prompt.printOneLn(Color.grayDark + "Press something to continue back.");
+        Console.placeCCenter();
         stdin.readLineSync();
         run();
     }
