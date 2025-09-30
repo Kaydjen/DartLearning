@@ -57,7 +57,7 @@ class Prompt {
         return input;
     }
 
-        static Result<Map<String, String>> getFlagsFromStr(String str, {String prefix = "--"}){
+    static Result<Map<String, String>> getFlagsFromStr(String str, {String prefix = "--"}){
         if(!str.contains(prefix)) return Result.fail(NoPrefixFound(str, prefix));
         List<String> res = List.empty(growable: true); // from: "4 --key1 value1 -- key2   value2"  to -> [key1 value1, key2   value2]
         List<int> indexes = List.empty(growable: true); // identify idexes of prefixes (index of first prefix above is 2)

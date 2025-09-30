@@ -29,7 +29,43 @@ extension FlashcardReviewExtension on Flashcard{
     }
 }
 
+/* 
 
+import 'flashcard.dart';
+
+extension FlashcardReviewExtension on Flashcard{
+    void updateReview(int quality) {
+        // ограничиваем оценку
+        quality = quality.clamp(0, 5).toInt();
+
+        if (quality <= 2) {
+            // плохой результат
+            repetitions = 0;
+            interval = 1;
+        } else {
+            // хороший результат
+            repetitions++;
+            if (repetitions == 1) {
+                interval = 1;
+            } else if (repetitions == 2) {
+                interval = 6;
+            } else {
+                interval = (interval * easeFactor).round();
+            }
+
+            easeFactor = (easeFactor - 0.8 + (0.28 * quality) - (0.02 * quality * quality))
+                .clamp(1.3, double.infinity);
+        }
+
+        // дата следующего повторения
+        nextReviewDate = DateTime.now().add(Duration(days: interval));
+    }
+}
+
+
+
+
+ */
 
 /* 
     void updateReview(int quality){ // метод, как и все, что есть в классе, я сделал не статическим. Ибо этот класс - по сути переменная,

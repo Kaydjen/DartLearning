@@ -1,3 +1,38 @@
+import '../../00_hub_core/menu_system/Menu.dart';
+import '../../01_sys/cli.dart';
+import 'sm2_ui_value_changer.dart';
+
+class SM2UI{
+    static Map<int, CliOptions> options = {
+        0: CliOptions(
+            des: "Go back to main menu",
+            func: () => Menu.runMenu(menuTypes.main)
+        ),
+        1: CliOptions(
+            des: "Start flashcard session",
+        ),
+        2: CliOptions(
+            des: "Add flashcard",
+        ),
+        3: CliOptions(
+            des: "Additional options (development...)",
+            func: SM2UIValueChanger.run
+        ),
+    };
+
+}
+
+
+
+
+
+
+
+/* 
+
+
+
+
 import 'dart:io';
 import '../../00_hub_core/data/menu_massages.dart';
 import '../../00_hub_core/menu_system/Menu.dart';
@@ -139,6 +174,12 @@ class SM2UI{
 
 
 
+
+
+
+
+
+ */
 
 
 

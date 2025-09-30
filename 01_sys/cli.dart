@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'color.dart';
 import 'console.dart';
+import 'exceptions/console_exeptions/cli_exeptions.dart';
+import 'exceptions/result_handler.dart';
 import 'prompt_handler.dart';
 
 /// i know, i know. It's better to write there contractor and not static methods... but, who gives a shit
@@ -45,7 +47,7 @@ class Cli {
          
         int maxLen = 0;
         for (var el in map.values) {
-          maxLen = max(maxLen, max(el.descLenght+textIndDesc+4, el.optLenght+textIndOpt+4));
+          maxLen = max(maxLen, max(el.descLength+textIndDesc+4, el.optLength+textIndOpt+4));
         }
 
         final int value = Console.width - maxLen;
@@ -166,14 +168,51 @@ class Cli {
     static int _length(String input) => input.replaceAll(RegExp(r'\x1B\[[0-9;]*[a-zA-Z]'), '').length;
 }
 
-class CliOptions{
+class CliOptions {
     final String des;
     final String opt;
-    CliOptions({required this.des, required this.opt});
+    final String shortOpt;
+    final void Function()? func;
+    final Map<String, void Function(String value)>? map;
 
-    int get descLenght => Prompt.visibleLength(des);
-    int get optLenght => Prompt.visibleLength(opt);
+    CliOptions({
+        required this.des,
+        this.opt = "",
+        this.shortOpt = "",
+        this.func,
+        this.map
+    });
+
+    int get descLength => Prompt.visibleLength(des);
+    int get optLength => Prompt.visibleLength(opt);
+    int get shortOptLength => Prompt.visibleLength(shortOpt);
+    @override
+    String toString() =>
+            '''
+        CliOptions(
+          des      : "$des",
+          opt      : "$opt",
+          shortOpt : "$shortOpt",
+          func     : $func,
+          map      : $map
+        )
+        ''';
 }
+
+class CliOptHelper{
+    static Result<void> process(Map<int, CliOptions> map, String input){
+        final id = int.tryParse(input.trim());
+        if(id != null){
+            if (!map.containsKey(id)) return Result.fail(NoSuchId(id)); // no such id
+             final func = map[id]!.func;
+            if (func == null) return Result.fail(NoFuncForId(id)); // no func for id <n>
+            func();
+        }
+        
+
+    }
+}
+
 
 
 /*
