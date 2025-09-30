@@ -56,7 +56,7 @@ class Prompt {
         stdout.write("\u001b[38;5;255m");
         return input;
     }
-
+    /// Returns flags
     static Result<Map<String, String>> getFlagsFromStr(String str, {String prefix = "--"}){
         if(!str.contains(prefix)) return Result.fail(NoPrefixFound(str, prefix));
         List<String> res = List.empty(growable: true); // from: "4 --key1 value1 -- key2   value2"  to -> [key1 value1, key2   value2]

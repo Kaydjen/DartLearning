@@ -19,3 +19,17 @@ class NoSuchId extends DomainError {
             },
         );
 }
+class IDNotAccessible extends DomainError {
+    IDNotAccessible()
+        : super(
+            code: "ID_NOT_ACCESSIBLE",
+            errorDescription: "Tried to access ID, but it's not set.",
+        );
+}
+class FlagsNotAccessible extends DomainError {
+    FlagsNotAccessible()
+        : super(
+            code: "FLAGS_NOT_ACCESSIBLE",
+            errorDescription: "Tried to access flags' map in CliOptions, but it's not set.",
+        );
+}

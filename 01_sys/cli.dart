@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'color.dart';
 import 'console.dart';
@@ -173,14 +174,14 @@ class CliOptions {
     final String opt;
     final String shortOpt;
     final void Function()? func;
-    final Map<String, void Function(String value)>? map;
+    final Map<String, void Function(String value)>? flags;
 
     CliOptions({
         required this.des,
         this.opt = "",
         this.shortOpt = "",
         this.func,
-        this.map
+        this.flags
     });
 
     int get descLength => Prompt.visibleLength(des);
@@ -194,24 +195,66 @@ class CliOptions {
           opt      : "$opt",
           shortOpt : "$shortOpt",
           func     : $func,
-          map      : $map
+          map      : $flags
         )
         ''';
 }
 
 class CliOptHelper{
-    static Result<void> process(Map<int, CliOptions> map, String input){
-        final id = int.tryParse(input.trim());
-        if(id != null){
-            if (!map.containsKey(id)) return Result.fail(NoSuchId(id)); // no such id
-             final func = map[id]!.func;
-            if (func == null) return Result.fail(NoFuncForId(id)); // no func for id <n>
-            func();
+    static Result<void> runMenu(Map<int, CliOptions> options){
+        final consoleWidth = Console.width;
+        final consoleHeight = Console.height;
+        while(true){
+            Cli.setColumn(options);
+            final res = CliOptHelper.process(options, stdin.readLineSync() ?? "");
+            if(!res.isSuccess){
+                Prompt.printOneLn(res.error.toString());
+                // todo: handle error whan it occurs
+                //continue;
+            }
+            break;
         }
-        
-
+        Console.setConsoleSize(width: consoleWidth, height: consoleHeight);
+        return Result.ok(());
     }
-}
+
+
+
+    static Result<void> process(Map<int, CliOptions> map, String input){   
+        input = input.trim();
+        final id = int.tryParse(input.substring(0, 1));
+        if(id==null) return Result.fail(IDNotAccessible()); 
+
+        if (!map.containsKey(id) || map[id] == null) return Result.fail(NoSuchId(id)); 
+        final options = map[id]!;
+
+        if(input.length == 1){ // it's for situation when the only thing we wanna make is just get the id and make an action assigned to ID
+            final func = options.func;
+            if (func == null) return Result.fail(NoFuncForId(id)); 
+            func();
+            return Result.ok(());
+        }  
+        final flagsResult = Prompt.getFlagsFromStr(input);
+        if(!flagsResult.isSuccess) return Result.fail(flagsResult.error!); 
+        final newFlags = flagsResult.value!;
+        final optFlags = options.flags;
+        if(optFlags == null) return Result.fail(FlagsNotAccessible()); // Expected flags' map in CliOptions, but got undefined
+        for (var flag in newFlags.entries) {
+            final key = flag.key;
+            if(optFlags.containsKey(key)){
+                optFlags[key]?.call(flag.value);
+            }
+        }
+        return Result.ok(());
+    }
+/*     static Result<void> processWithoutId(String input, Map<String, void Function(String value)> map){
+
+    } */
+
+
+
+   
+}   
 
 
 
