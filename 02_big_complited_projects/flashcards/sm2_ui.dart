@@ -20,38 +20,41 @@ class SM2UI{
         ),
     };
     static final Map<int, CliOptions> _secondaryOptions = {
-            0: CliOptions(
-                des: "to return back",
-                func: () => CliOptHelper.runMenu(_primaryOptions),
-            ),
-            1: CliOptions(
-                des: "to see examples",
-            ),
-            2: CliOptions(
-                des: "to see all flashcards",
-            ),
-            3: CliOptions(
-                des: "to see certain flashcard",
-                opt: "--index_of_card",
-                shortOpt: "-i"
-            ),
-            4: CliOptions(
-                des: "to change certain flashcard's value (you can write one value or both)",
-                opt: "--index_of_card --question new_question --answer new_answer",
-                shortOpt: "-i -q new_question -a new_answer"
-            ),
-            // NEW
-            5: CliOptions(
-                des: "to remove certain flashcard",
-                opt: "--index_of_card",
-                shortOpt: "-index_of_card",
-            ),
-            6: CliOptions(
-                des: "to remove all flashcards",
-                opt: "--remove",
-                shortOpt: "-r"
-            ),
-        };
+        0: CliOptions(
+            des: "to return back",
+            func: () => CliOptHelper.runMenu(_primaryOptions),
+        ),
+        1: CliOptions(
+            des: "to see examples",
+        ),
+        2: CliOptions(
+            des: "to see all flashcards",
+        ),
+        3: CliOptions(
+            des: "to see certain flashcard",
+            opt: "--index index_of_card",   
+            shortOpt: "-i index",
+            flags: {
+                "i": (input) => print(input),
+            }
+        ),
+        4: CliOptions(
+            des: "to change certain flashcard's value (you can write one value or both)",
+            opt: "--index_of_card --question new_question --answer new_answer",
+            shortOpt: "-i -q new_question -a new_answer"
+        ),
+        // NEW
+        5: CliOptions(
+            des: "to remove certain flashcard",
+            opt: "--index_of_card",
+            shortOpt: "-index_of_card",
+        ),
+        6: CliOptions(
+            des: "to remove all flashcards",
+            opt: "--remove",
+            shortOpt: "-r"
+        ),
+    };
 }
 
 

@@ -6,8 +6,213 @@ class Benchmark extends BenchmarkBase {
     @override
     void run() {
 
+    } //
+}
+/* 8
+/* 8-2
+    class Solution {
+        static int myAtoi(String s) {
+            Map<String, int> numbers = {"0": 0,"1": 1,"2": 2,"3": 3,"4": 4,"5": 5,"6": 6,"7": 7,"8": 8,"9": 9};
+            final len = s.length;
+            int res = 0;
+            int i = 0;
+            for (; i < len; i++) if(s[i] != " ") break;  
+            if(i==len) return 0;
+            bool isNegative = false;
+            if(s[i] == "-"){
+                isNegative = true;
+                i++;
+            }
+            else if(s[i] == "+"){
+                i++;
+            }
+            if(i == len || i < len && !numbers.containsKey(s[i])) return 0; 
+            do{
+                res = res * 10 + numbers[s[i]]!;
+                if(res > 2147483647) return isNegative ? -2147483648 : 2147483647;
+                i++;
+            }while(i < len && numbers.containsKey(s[i]));
+            if(isNegative) res *= -1;
+            return res;
+        }
+    }
+*/
+/* 8-1(first variant of solving) It reads string and return int if it exists there
+class Solution {
+    static int myAtoi(String s) {
+        Map<String, int> numbers = {"0": 0,"1": 1,"2": 2,"3": 3,"4": 4,"5": 5,"6": 6,"7": 7,"8": 8,"9": 9};
+        final len = s.length;
+        int res = 0;
+        for (int i = 0; i < len; i++) {
+            if(numbers.containsKey(s[i])){
+                final int idex = i-1;
+                do{
+                    res = res * 10 + numbers[s[i]]!;
+                    i++;
+                }while(i < len && numbers.containsKey(s[i]));
+                if(idex < len && idex >= 0 && s[idex] == "-"){
+                    res *= -1;
+                }
+                break;
+            }
+        }      
+        return res;
+    }
+} 
+*/
+ */
+/* 7 runtime -
+class Solution {
+    int reverse(int x) {
+        int res = 0;
+        bool isNegative = x.isNegative;
+        if(isNegative) x *= -1;
+        while(x!=0){
+            final temp = x%10;
+            res = res*10+temp;
+            x=(x/10).toInt();
+        }
+        if(isNegative) res *= -1;
+        return res;
+    }
+} */
+/* 6 no runtime
+class Solution {
+    String convert(String s, int numRows) {
+        final len = s.length;
+        int step = numRows==1 ? 1 : (numRows-1)*2;
+        String res = "";
+        for (int i = 0; i < len; i+=step) res += s[i];
+        step -= 2;
+        final newI = numRows-1;
+        for (int i = 1; i < newI; i++) {
+            int j = i;
+            final stepi2=i*2;
+            while(j < len){
+                res += s[j];
+                j+=step; 
+                if(j >= len) break; 
+                res += s[j];
+                j+=stepi2;
+            }
+            step -= 2;
+        }
+        final step1 = newI*2;
+        if(step1 != 0)
+            for (int i = newI; i < len; i+=step1) res += s[i];
+        return res;
     } 
 }
+/* 
+/* 
+
+class Solution {
+    String convert(String s, int numRows) {
+        final len = s.length;
+        int step = numRows==1 ? 1 : (numRows-1)*2;
+        String res = "";
+        for (int i = 0; i < len; i+=step) res += s[i];
+        step -= 2;
+        final newI = numRows-1;
+        for (int i = 1; i < newI; i++) {
+            int j = i;
+            final stepi2=i*2;
+            do{
+                res += s[j];
+                j+=step; 
+                if(j >= len) break; 
+                res += s[j];
+                j+=stepi2;
+            }while(j < len);
+            step -= 2;
+        }
+        final step1 = newI*2;
+        if(step1 != 0)
+            for (int i = newI; i < len; i+=step1) res += s[i];
+        return res;
+    } 
+}
+
+
+ */
+/* 
+                if(step != 0){
+                    j+=step;
+                }
+                if(i*2 != null){
+                    j+= i*2;
+                }
+ */
+/* 
+        int step = (numRows-1)*2;
+        String res = "";
+        for (int i = 0; i < s.length; i+=step) {
+             res += s[i];
+        }
+        for (int i = 1; i < numRows; i++) {
+            final step1 = i*2;
+            for (int j = i; j < s.length; j+=step) {
+                res += s[j+step1] + s[j];
+            }
+            step-=2;
+        }
+        return res;
+
+
+---
+        int step = numRows + (numRows - 2);
+        String res = "";
+        for (int i = 0; i < numRows; i++) {
+            if(i == numRows-2) step = 2;        
+            else if(step <= 2) step = numRows + (numRows - 2);
+            print("i - $i  step=$step");
+            for (int j = i; j < s.length; j+=step) {
+                res += s[j];
+                print("j: $j  | id: ${j} - ${s[j]}");
+            }  
+            step -= 2;
+        }
+        return res;
+
+
+ */
+//PAHNALIGYIR
+//PAYPALISHIRING
+//PINALSIGYAHRPI
+//PINALSIGYAHRPI
+
+//PINALSIGYAHRPI
+//PINALIGYAIHRNPI
+
+// numRows = 3
+// 1-1 all else 4 (numRows += numRows-2)
+// 2
+// 1-3 all else 4
+
+// numRows = 4
+// 1-1 all else 6 (numRows += numRows-2)
+// 
+// PAYPALISHIRING
+ */
+ */
+/* 5 without runtime
+class Solution {
+    static String longestPalindrome(String s) { // "baaaab" "cbbd"
+        final len = s.length;
+        String res = "";
+        for (int center = 0; center < len; center++) {
+            for (int offset = 1; offset <= 2; offset++) {
+                int left = center, right = center + offset;
+                while (left >= 0 && right < len && s[left] == s[right]) {
+                    if (right - left + 1 > res.length) res = s.substring(left, right + 1);
+                    left--;
+                    right++;
+                }
+            }
+        }
+        return res == "" ? s[0] : res;
+    } 
+} */
 /* 4 (RunTime): // 1.5164437417781291 us
 class Solution {
     static double findMedianSortedArrays(List<int> nums1, List<int> nums2) {

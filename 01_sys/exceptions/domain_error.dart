@@ -29,26 +29,29 @@ abstract class DomainError implements Exception {
     String cont = "";
     if(!context.isEmpty) cont = _showContext(context);
     return 
+        '\n'
         '${Color.set(ColorTypes.brightGreen, str: code)}'
         '${Color.set(ColorTypes.brightCyan, str: ":")} '
-        '${Color.set(ColorTypes.red, str: errorDescription)}' 
+        '${Color.set(ColorTypes.red, str: errorDescription.isEmpty ? "${Color.darkGray}no description" : errorDescription)}' 
 
         '$cont'
 
-        '\n${Color.set(ColorTypes.brightGreen, str: "place")} '
-        '\u001b[38;5;255m= '
-        '${Color.set(ColorTypes.red, str: place)}';
+        '\n${_showPlace(place)}';
   }
 }
-
+String _showPlace(Object? place){
+    if(place == null) return "";
+    return "${Color.brightGreen}place: ${Color.red}$place";
+}
 String _showContext(Map<String, Object?> context){
-    String content = "\n";
-    for (final el in context.entries) 
-        content += 
-        "\n${Color.set(ColorTypes.brightGreen, str: el.key)}"
-        "\u001b[38;5;255m: "
-        "${Color.set(ColorTypes.red)}"; 
-    return content;
+        String content = "";
+        for (final el in context.entries) 
+            content += 
+            "\n"
+            "${Color.set(ColorTypes.brightGreen, str: el.key)}"
+            "\u001b[38;5;255m: "
+            "${Color.set(ColorTypes.red, str: el.value)}"; 
+        return content;
 }
 
 

@@ -68,7 +68,7 @@ class Prompt {
         }while(str.contains(prefix, indexes[idex-1]+1));
         idex = 0;
         do{ // get result list
-            res.add(str.substring(indexes[idex]+2, (indexes.length <= idex+1 ? str.length : indexes[idex+1])).trim());
+            res.add(str.substring(indexes[idex]+prefix.length, (indexes.length <= idex+1 ? str.length : indexes[idex+1])).trim());
             idex++;
         }while(idex < indexes.length);
 

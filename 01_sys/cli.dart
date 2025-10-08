@@ -17,28 +17,40 @@ class Cli {
     static int _mWidth = 0; // whole middle column width 
     static String _colorOutline = Color.darkGray;
     static const int _minBCWidth = 3;
+    static const CliLineSymbols _sTopUp = CliLineSymbols(crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
+    static const CliLineSymbols _sTopDown = CliLineSymbols(crl: "└", cnl: "┘", hlm: " ", cnml: "└", cnmr: "┘", hrm: " ", cnr: "└", crr: "┘");
+    static const CliLineSymbols _sUp = CliLineSymbols(crl: "┌", cnl: "┬",  cnml: "─", cnmr: "─", cnr: "┬", crr: "┐");
+    static const CliLineSymbols _sDown = CliLineSymbols(crl: "└", cnl: "┴",  cnml: "─", cnmr: "─", cnr: "┴", crr: "┘");
+/*     static const Map<int, CliOptions> _map = {
+        0: CliOptions(),
+    } */
     /// [doSetTMC] - do set top-middle column 
     static void setColumn(
         Map<int, CliOptions> map, 
         {
-            String lbcStr = "◊",
-            String rbcStr = "◊",
-            String mbcStr = "¯\\(0-0)/¯",
-            bool doSetTMC = true, 
-            int lbcWidth = 7, 
-            int rbcWidth = 7,
-            bool doFitBC = true,
-            int topBorder = 1,
-            int bottomBorder = 1,
-            int textIndDesc = 2,
-            int textIndOpt = 4,
-            String colorOutline = Color.darkGray,
-            String colorTextDesc = Color.grayDark,
-            String colorTextOpt = Color.darkRed,
-            String colorTextNum = Color.darkRed,
-            String colorLBC = Color.grayDark,
-            String colorRBC = Color.grayDark,
-            String colorMBC = Color.grayDark,
+            String lbcStr = "◊", // Left border column string
+            String rbcStr = "◊", // Right border column string
+            String mbcStr = "¯\\(0-0)/¯", // Middle border column string
+            bool doSetTMC = true, // Whether to set top-middle column
+            int lbcWidth = 7, // Left border column width
+            int rbcWidth = 7, // Right border column width
+            bool doFitBC = true, // Fit border columns if possible
+            int topBorder = 1, // Top border height
+            int bottomBorder = 1, // Bottom border height
+            int textIndDesc = 2, // Indent for description text
+            int textIndOpt = 4, // Indent for option text
+            String colorOutline = Color.darkGray, // Outline color
+            String colorTextDesc = Color.grayDark, // Description text color
+            String colorTextOpt = Color.darkRed, // Option text color
+            String colorTextNum = Color.darkRed, // Number text color
+            String colorLBC = Color.grayDark, // Left border column color
+            String colorRBC = Color.grayDark, // Right border column color
+            String colorMBC = Color.grayDark, // Middle border column color
+            bool doWriteIndex = true, // Whether to write the index number for each option
+            CliLineSymbols sTopUp = _sTopUp,
+            CliLineSymbols sTopDown = _sTopDown,
+            CliLineSymbols sUp = _sUp,
+            CliLineSymbols sDown = _sDown,
         }){
         _colorOutline = colorOutline;
         lbcWidth = max(3, lbcWidth);
@@ -76,26 +88,24 @@ class Cli {
         }
 
         // TOP
-        _printLn(crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
+        _printLn(s: sTopUp);
         _print(lStr: colorLBC+lbcStr, mStr:  "│"+colorMBC+_pad(_mmWidth, mbcStr)+_colorOutline+"│",rStr: colorRBC+rbcStr, mPl: _mbmWidthL);
-        _printLn(crl: "└", cnl: "┘", hlm: " ", cnml: "└", cnmr: "┘", hrm: " ", cnr: "└", crr: "┘");
+        _printLn(s: sTopDown);
 
         // MIDDLE-TOP
-        _printLn(crl: "┌", cnl: "┬",  cnml: "─", cnmr: "─", cnr: "┬", crr: "┐");
-        //_printLn(crl: "┌", cnl: "┐",  cnml: "─", cnmr: "─", cnr: "┌", crr: "┐");
+        _printLn(s: sUp);
 
         // MIDDLE
         if((Console.height-map.length-5-topBorder-bottomBorder) < 0){
             Console.setConsoleSize(height: map.length+5+topBorder+bottomBorder);
         }
         for (var el in map.entries) {
-            _print(mPl: textIndDesc, lStr: colorTextNum + el.key.toString(), mStr: colorTextDesc + el.value.des);
+            _print(mPl: textIndDesc, lStr: colorTextNum + (doWriteIndex ? el.key.toString() : ""), mStr: colorTextDesc + el.value.des);
             _print(mPl: textIndOpt, mStr: colorTextOpt + el.value.opt);
         }
 
-        // MIDDLE-DOWN
-        //_printLn(crl: "└", cnl: "┘",  cnml: "─", cnmr: "─", cnr: "└", crr: "┘");
-        _printLn(crl: "└", cnl: "┴",  cnml: "─", cnmr: "─", cnr: "┴", crr: "┘");
+        // DOWN
+        _printLn(s: sDown);
     }
     static void _countMWidth(){
         _mWidth = Console.width-_lWidth-_rWidth-4;
@@ -147,26 +157,77 @@ class Cli {
     /// - [hr]: horizontal line right  (default: "─")
     /// - [crr]: corner right symbol (default: "┘")
     static void _printLn({
-        String crl = "└",
-        String hl = "─", 
-        String cnl = "┴",
-        String hlm = "─", 
-        String cnml = "┴",
-        String hmm = "─",
-        String cnmr = "┴",
-        String hrm = "─",
-        String cnr = "┴",
-        String hr = "─",
-        String crr = "┘",
+        CliLineSymbols s = const CliLineSymbols(),
     }) {
         print(_colorOutline
-        + crl + hl*_lWidth + cnl
-        + hlm*_mbmWidthL
-        + cnml + hmm*_mmWidth + cnmr
-        + hrm*_mbmWidthR
-        + cnr + hr*_rWidth + crr);
+        + s.crl + s.hl*_lWidth + s.cnl
+        + s.hlm*_mbmWidthL
+        + s.cnml + s.hmm*_mmWidth + s.cnmr
+        + s.hrm*_mbmWidthR
+        + s.cnr + s.hr*_rWidth + s.crr);
     }
     static int _length(String input) => input.replaceAll(RegExp(r'\x1B\[[0-9;]*[a-zA-Z]'), '').length;
+}
+enum Place{
+    start, // from start of line to the left
+    midLeft, // from mid of the line to the left
+    midRight, // from mid of the line to the right
+    end // from the end of the line to the left
+}
+class LineL{
+    String sb; // symbol which will be placed in collumn in the specified place
+    String sbFill; // symbol to fill the emply space on line
+    int len; // lenght of symbols from sb to the side pointed in indent
+    Place indent; // indent to next symbol OR it is the space, that will be filled with sbFill 
+    LineL({this.sb = "", this.sbFill = "", this.len = 0, this.indent = Place.start});
+}
+class Line{
+    String s = "";
+    int get sLen => s.length;
+
+    List<LineL>? list = [];
+    Line({this.list});
+
+    int requiredStrLen = 20;
+
+/*     String tryToSetUpStr(){
+        if(list == null) return "";
+
+    } */
+    void println(){
+        if(sLen == 0) //tryToSetUpStr();
+        if(sLen == 0) print("");
+
+        print("");
+    }
+}
+
+class CliLineSymbols {
+    final String crl;
+    final String hl;
+    final String cnl;
+    final String hlm;
+    final String cnml;
+    final String hmm;
+    final String cnmr;
+    final String hrm;
+    final String cnr;
+    final String hr;
+    final String crr;
+
+    const CliLineSymbols({
+        this.crl = "└",
+        this.hl = "─",
+        this.cnl = "┴",
+        this.hlm = "─",
+        this.cnml = "┴",
+        this.hmm = "─",
+        this.cnmr = "┴",
+        this.hrm = "─",
+        this.cnr = "┴",
+        this.hr = "─",
+        this.crr = "┘",
+    });
 }
 
 class CliOptions {
@@ -201,12 +262,16 @@ class CliOptions {
 }
 
 class CliOptHelper{
+    static const CliLineSymbols _sTopUp = CliLineSymbols(crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
+    static const CliLineSymbols _sTopDown = CliLineSymbols(crl: "└", cnl: "┘", hlm: " ", cnml: "└", cnmr: "┘", hrm: " ", cnr: "└", crr: "┘");
+    static const CliLineSymbols _sUp = CliLineSymbols(crl: "┌", cnl: "┬",  cnml: "─", cnmr: "─", cnr: "┬", crr: "┐");
+    static const CliLineSymbols _sDown = CliLineSymbols(crl: "└", cnl: "┴",  cnml: "─", cnmr: "─", cnr: "┴", crr: "┘");
     static Result<void> runMenu(Map<int, CliOptions> options){
         final consoleWidth = Console.width;
         final consoleHeight = Console.height;
         while(true){
             Cli.setColumn(options);
-            final res = CliOptHelper.process(options, stdin.readLineSync() ?? "");
+            final res = CliOptHelper.processActions(options, stdin.readLineSync() ?? "");
             if(!res.isSuccess){
                 Prompt.printOneLn(res.error.toString());
                 // todo: handle error whan it occurs
@@ -214,30 +279,48 @@ class CliOptHelper{
             }
             break;
         }
-        Console.setConsoleSize(width: consoleWidth, height: consoleHeight);
+        //Console.setConsoleSize(width: consoleWidth, height: consoleHeight);
+        return Result.ok(());
+    }
+    static Result<void> runTableMenu({String leftStr = "", String rightStr = "", int leftLen = 20, int rightLen = 20, bool isSymmetric = true}){
+        // todo: load(save) resolution *(maybe)
+
+        leftLen = max(leftLen, leftStr.length);
+        rightLen = max(rightLen, leftStr.length);
+
+        if(isSymmetric) leftLen = rightLen = max(leftLen, rightLen);
+
+        String str = leftStr + "|" + rightStr;
+
+        Map<int, CliOptions> map = {
+            0: CliOptions(
+                des: str,
+            )
+        };
+        Cli.setColumn(map);
+
+        // todo: unload resolution *(maybe)
         return Result.ok(());
     }
 
-
-
-    static Result<void> process(Map<int, CliOptions> map, String input){   
+    static Result<void> processActions(Map<int, CliOptions> map, String input){   
         input = input.trim();
         final id = int.tryParse(input.substring(0, 1));
         if(id==null) return Result.fail(IDNotAccessible()); 
 
         if (!map.containsKey(id) || map[id] == null) return Result.fail(NoSuchId(id)); 
-        final options = map[id]!;
+        final cliOptions = map[id]!;
 
         if(input.length == 1){ // it's for situation when the only thing we wanna make is just get the id and make an action assigned to ID
-            final func = options.func;
+            final func = cliOptions.func;
             if (func == null) return Result.fail(NoFuncForId(id)); 
             func();
             return Result.ok(());
         }  
-        final flagsResult = Prompt.getFlagsFromStr(input);
+        final flagsResult = Prompt.getFlagsFromStr(input, prefix: "-");
         if(!flagsResult.isSuccess) return Result.fail(flagsResult.error!); 
         final newFlags = flagsResult.value!;
-        final optFlags = options.flags;
+        final optFlags = cliOptions.flags;
         if(optFlags == null) return Result.fail(FlagsNotAccessible()); // Expected flags' map in CliOptions, but got undefined
         for (var flag in newFlags.entries) {
             final key = flag.key;
@@ -250,10 +333,6 @@ class CliOptHelper{
 /*     static Result<void> processWithoutId(String input, Map<String, void Function(String value)> map){
 
     } */
-
-
-
-   
 }   
 
 

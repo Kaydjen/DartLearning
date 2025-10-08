@@ -27,12 +27,6 @@ class Flashcard{
         'easeFactor': card.easeFactor, 
         'nextReviewDate': card.nextReviewDate.toString(), 
     };
-
-    void changeAnswer(String value){
-        if(value.trim().isEmpty) {
-            
-        }
-    }
 }
 /* 
 
