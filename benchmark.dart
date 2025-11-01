@@ -8,6 +8,72 @@ class Benchmark extends BenchmarkBase {
 
     } //
 }
+
+/* 
+class Solution {
+    int lengthOfLongestSubstring(String s) {
+        Set<String> letters = {};
+        int maxSubString = 0;
+        for (int i = 0; i < s.length; i++) {
+            while (letters.contains(s[i])) {
+                letters.remove(letters.first);
+            }
+            letters.add(s[i]);
+            final int len = letters.length;
+            maxSubString = len>maxSubString?len:maxSubString;
+        }
+        return maxSubString; 
+    }
+} 
+*/
+
+/* class Solution {
+    List<List<int>> threeSum(List<int> nums) {
+        List<List<int>> list = [];
+
+        for(int i = 2; i < nums.length; i++){
+            if(nums[i-2]+nums[i-1]+nums[i] == 0) list.add([nums[i-2],nums[i-1],nums[i]]);
+        }
+
+        for(int i = 1; i<nums.length - 2; i++){
+            int j;
+            j = i==1?3:i+1;
+            while(j<nums.length){
+                  if(nums[0]+nums[i]+nums[j] == 0) list.add([nums[0],nums[i],nums[j]]);
+                  j++; //
+            }
+        }
+    }
+} */
+
+
+
+/* 
+class Solution {
+    static Map<String, String> map = {
+        "1": "",
+        "2": "abc",
+        "3": "def",
+    };
+    List<String> letterCombinations(String digits) {
+        List<String> list = [];
+        for(int i = 0; i < digits.length; i++){
+            String letters = map[digits[i]]!;
+            for (int j = 0; j < letters.length; j++) {
+                if(list.isEmpty){
+                    list.add(letters[j]);
+                    j+=1;
+                }
+                String temp = list[0];
+                for (int l = 0; l < list.length; l++) {
+                    list.add(temp+letters[j]);
+                }
+            }
+        }
+    }
+}
+
+ */
 /* 8
 /* 8-2
     class Solution {

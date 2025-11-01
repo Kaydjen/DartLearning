@@ -1,5 +1,7 @@
 import '../../00_hub_core/menu_system/Menu.dart';
 import '../../01_sys/cli.dart';
+import '../../01_sys/cli_opt_helper.dart';
+import 'sm2.dart';
 
 class SM2UI{
     static void mainMenu() => CliOptHelper.runMenu(_primaryOptions);
@@ -13,6 +15,10 @@ class SM2UI{
         ),
         2: CliOptions(
             des: "Add flashcard",
+            flags: {
+                "q": (question) => SM2.addQuestion(question),
+                "a": (answer) => SM2.addAnswer(answer)
+            }
         ),
         3: CliOptions(
             des: "Additional options (development...)",

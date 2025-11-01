@@ -6,9 +6,7 @@ class Flashcard{
     int interval = 0;
     double easeFactor = 2.5; // score that give player
     DateTime nextReviewDate = DateTime(2025, 1, 1);                               // такой вот встроенный способ хранения даты
-    Flashcard({required this.question, required this.answer, 
-    required this.repetitions, required this.interval, 
-    required this.easeFactor, required this.nextReviewDate});
+    Flashcard({required this.question, required this.answer});
 
     Flashcard.fromJson(Map<String, dynamic> json)
         : question = json["question"] as String,

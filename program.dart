@@ -2,12 +2,14 @@ import '00_hub_core/menu_system/menu.dart';
 import '00_hub_core/menu_system/welcome_menu.dart';
 import '01_sys/console.dart';
 import '01_sys/prompt_handler.dart';
+import '02_big_complited_projects/flashcards/sm2_ui.dart';
 import 'benchmark.dart';
 
 void main() {
     Console.setConsoleSize(height: Console.heightInit, width: Console.widthInit);
-    WelcomeMenu.showWelcomeMessage();
-    Menu.runMenu(menuTypes.main);  
+    SM2UI.mainMenu();
+    //WelcomeMenu.showWelcomeMessage();
+    //Menu.runMenu(menuTypes.main);  
     //Benchmark().report();
 }
 

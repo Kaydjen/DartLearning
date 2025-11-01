@@ -1,9 +1,6 @@
-import 'dart:io';
 import 'dart:math';
 import 'color.dart';
 import 'console.dart';
-import 'exceptions/console_exeptions/cli_exeptions.dart';
-import 'exceptions/result_handler.dart';
 import 'prompt_handler.dart';
 
 /// i know, i know. It's better to write there contractor and not static methods... but, who gives a shit
@@ -21,6 +18,20 @@ class Cli {
     static const CliLineSymbols _sTopDown = CliLineSymbols(crl: "└", cnl: "┘", hlm: " ", cnml: "└", cnmr: "┘", hrm: " ", cnr: "└", crr: "┘");
     static const CliLineSymbols _sUp = CliLineSymbols(crl: "┌", cnl: "┬",  cnml: "─", cnmr: "─", cnr: "┬", crr: "┐");
     static const CliLineSymbols _sDown = CliLineSymbols(crl: "└", cnl: "┴",  cnml: "─", cnmr: "─", cnr: "┴", crr: "┘");
+/*     static (Line, Line, Line, Line) setLines({Line? topUp, Line? topDown, Line? up, Line? down}){ // It's a piece of shit and I know it, just leave it
+        topUp ??= Line([ // (crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
+            LineL( sb: "┌", len: _lWidth),
+            LineL( sb: "┐", len: 0),
+            LineL( sb: " ", len: _mbmWidthL),
+            LineL( sb: "┌", len: _mmWidth),
+            LineL( sb: "┐", len: 0),
+            LineL( sb: " ", len: 0),
+            LineL( sb: "", len: _mbmWidthR),
+            LineL( sb: "┌", len: ),
+            LineL( sb: "", len: ),
+            LineL( sb: "", len: ),
+        ]);
+    } */
 /*     static const Map<int, CliOptions> _map = {
         0: CliOptions(),
     } */
@@ -168,37 +179,42 @@ class Cli {
     }
     static int _length(String input) => input.replaceAll(RegExp(r'\x1B\[[0-9;]*[a-zA-Z]'), '').length;
 }
-enum Place{
+/* enum Place{
     start, // from start of line to the left
     midLeft, // from mid of the line to the left
     midRight, // from mid of the line to the right
     end // from the end of the line to the left
+} */
+enum Side{
+    left,
+    right
 }
 class LineL{
     String sb; // symbol which will be placed in collumn in the specified place
     String sbFill; // symbol to fill the emply space on line
     int len; // lenght of symbols from sb to the side pointed in indent
-    Place indent; // indent to next symbol OR it is the space, that will be filled with sbFill 
-    LineL({this.sb = "", this.sbFill = "", this.len = 0, this.indent = Place.start});
+    Side dir; // indent to next symbol OR it is the space, that will be filled with sbFill 
+    LineL({this.sb = "", this.sbFill = "─", this.len = 0, this.dir = Side.right});
 }
-class Line{
+class Line{ // I'm sorry 
     String s = "";
-    int get sLen => s.length;
-
-    List<LineL>? list = [];
-    Line({this.list});
+    List<LineL>? list;
+    Line([this.list]);
 
     int requiredStrLen = 20;
 
-/*     String tryToSetUpStr(){
+    String tryToSetUpStr(){
         if(list == null) return "";
-
-    } */
+        String str = "";
+        for (var el in list!) {
+            final String sbFill = el.sbFill * el.len;
+            str += el.dir == Side.left ? sbFill + el.sb : el.sb + sbFill;
+        }
+        return str;
+    }
     void println(){
-        if(sLen == 0) //tryToSetUpStr();
-        if(sLen == 0) print("");
-
-        print("");
+        if(s.length == 0) s = tryToSetUpStr();
+        print(s);
     }
 }
 
@@ -260,154 +276,3 @@ class CliOptions {
         )
         ''';
 }
-
-class CliOptHelper{
-    static const CliLineSymbols _sTopUp = CliLineSymbols(crl: "┌", cnl: "┐", hlm: " ", cnml: "┌", cnmr: "┐", hrm: " ", cnr: "┌", crr: "┐");
-    static const CliLineSymbols _sTopDown = CliLineSymbols(crl: "└", cnl: "┘", hlm: " ", cnml: "└", cnmr: "┘", hrm: " ", cnr: "└", crr: "┘");
-    static const CliLineSymbols _sUp = CliLineSymbols(crl: "┌", cnl: "┬",  cnml: "─", cnmr: "─", cnr: "┬", crr: "┐");
-    static const CliLineSymbols _sDown = CliLineSymbols(crl: "└", cnl: "┴",  cnml: "─", cnmr: "─", cnr: "┴", crr: "┘");
-    static Result<void> runMenu(Map<int, CliOptions> options){
-        final consoleWidth = Console.width;
-        final consoleHeight = Console.height;
-        while(true){
-            Cli.setColumn(options);
-            final res = CliOptHelper.processActions(options, stdin.readLineSync() ?? "");
-            if(!res.isSuccess){
-                Prompt.printOneLn(res.error.toString());
-                // todo: handle error whan it occurs
-                //continue;
-            }
-            break;
-        }
-        //Console.setConsoleSize(width: consoleWidth, height: consoleHeight);
-        return Result.ok(());
-    }
-    static Result<void> runTableMenu({String leftStr = "", String rightStr = "", int leftLen = 20, int rightLen = 20, bool isSymmetric = true}){
-        // todo: load(save) resolution *(maybe)
-
-        leftLen = max(leftLen, leftStr.length);
-        rightLen = max(rightLen, leftStr.length);
-
-        if(isSymmetric) leftLen = rightLen = max(leftLen, rightLen);
-
-        String str = leftStr + "|" + rightStr;
-
-        Map<int, CliOptions> map = {
-            0: CliOptions(
-                des: str,
-            )
-        };
-        Cli.setColumn(map);
-
-        // todo: unload resolution *(maybe)
-        return Result.ok(());
-    }
-
-    static Result<void> processActions(Map<int, CliOptions> map, String input){   
-        input = input.trim();
-        final id = int.tryParse(input.substring(0, 1));
-        if(id==null) return Result.fail(IDNotAccessible()); 
-
-        if (!map.containsKey(id) || map[id] == null) return Result.fail(NoSuchId(id)); 
-        final cliOptions = map[id]!;
-
-        if(input.length == 1){ // it's for situation when the only thing we wanna make is just get the id and make an action assigned to ID
-            final func = cliOptions.func;
-            if (func == null) return Result.fail(NoFuncForId(id)); 
-            func();
-            return Result.ok(());
-        }  
-        final flagsResult = Prompt.getFlagsFromStr(input, prefix: "-");
-        if(!flagsResult.isSuccess) return Result.fail(flagsResult.error!); 
-        final newFlags = flagsResult.value!;
-        final optFlags = cliOptions.flags;
-        if(optFlags == null) return Result.fail(FlagsNotAccessible()); // Expected flags' map in CliOptions, but got undefined
-        for (var flag in newFlags.entries) {
-            final key = flag.key;
-            if(optFlags.containsKey(key)){
-                optFlags[key]?.call(flag.value);
-            }
-        }
-        return Result.ok(());
-    }
-/*     static Result<void> processWithoutId(String input, Map<String, void Function(String value)> map){
-
-    } */
-}   
-
-
-
-/*
-        final int lSL = _length(lStr);
-        if((lWidth.isEven && lSL.isEven) || (lWidth.isOdd && lSL.isOdd)){
-            final double lwp = (lWidth - lSL)/2;
-            lP = lPr = lwp.toInt();
-        }
-        else if((lWidth.isEven && lSL.isOdd) || (lWidth.isOdd && lSL.isEven)){
-            final int lwp = ((lWidth - lSL)/2).round();
-            lP = lwp;
-            lPr = lwp-1;
-        }   
-        final int rSL = _length(rStr);
-        if((rWidth.isEven && rSL.isEven) || (rWidth.isOdd && rSL.isOdd)){
-            final double rwp = (rWidth - rSL)/2;
-            rP = rPr = rwp.toInt();
-        }
-        else if((rWidth.isEven && rSL.isOdd) || (rWidth.isOdd && rSL.isEven)){
-            final int rwp = ((rWidth - rSL)/2).round();
-            rP = rwp;
-            rPr = rwp-1;
-        }   
-
-
-*/ 
-
-
-        // if(maxLenght < curConWidth-lbcWidth-rbcWidth){ 
-        //     lWidth = lbcWidth;
-        //     rWidth = rbcWidth;
-        // } 
-        // else if(doFitBC) {
-        //     if(curConWidth > maxLenght){
-        //         final int value = curConWidth - maxLenght;
-        //         if(value>=minBCWidth*2){
-        //             final int newWidth = (value%2 == 0 ? value/2 : (value-1)/2).toInt();
-        //             lWidth = newWidth;
-        //             rWidth = newWidth;
-        //         }
-        //         else{
-        //             Console.setConsoleSize(width: maxLenght+lbcWidth+rbcWidth);
-        //             lWidth = lbcWidth;
-        //             rWidth = rbcWidth;
-                    
-        //         }
-        //     }
-        //     else{
-        //         Console.setConsoleSize(width: maxLenght+lbcWidth+rbcWidth);
-        //         lWidth = lbcWidth;
-        //         rWidth = rbcWidth;
-        //         curConWidth = Console.width;
-        //     }
-        // }
-        // else{
-        //     Console.setConsoleSize(width: maxLenght+lbcWidth+rbcWidth);
-        //     lWidth = lbcWidth;
-        //     rWidth = rbcWidth;
-        //     curConWidth = Console.width;
-        // }
-
-
-        /* 
-        
-        
-        print("maxLen: " + maxLen.toString);
-        print("Console.width: " + Console.width.toString());
-        print("lWidth: " + _lWidth.toString());
-        print("rWidth: " + _rWidth.toString());
-        print("mWidth: " + _mWidth.toString());
-        print("mmWidth: " + _mmWidth.toString());
-        print("mbmWidthL: " + _mbmWidthL.toString());
-        print("mbmWidthR: " + _mbmWidthR.toString());
-        
-        
-         */

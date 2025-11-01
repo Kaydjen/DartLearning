@@ -41,7 +41,29 @@ class SM2 {
         if(_data.length < index) return Result.fail(IndexOutOfRange("_data flashcard", index));
         else return Result.ok(_data[index]);
     }
-    static void addCard(Flashcard card) => _data.add(card);
+    static void addFlashCard(Flashcard card) => _data.add(card); // it was here befor, so let it stay
+    static void addCard(String question, String answer) => _data.add(Flashcard(question: question, answer: answer));
+    static String _cardQuestion = "";
+    static String _cardAnswer = "";
+    static void addQuestion(String question) {
+        _cardQuestion = question;
+        if(!_cardAnswer.isEmpty){
+            addCard(_cardQuestion, _cardAnswer);
+            saveAllCards();
+            _cardQuestion = "";
+            _cardAnswer = "";
+        }
+    }
+    /// saves all cards automatically
+    static void addAnswer(String answer) {
+        _cardAnswer = answer;
+        if(!_cardQuestion.isEmpty){
+            addCard(_cardQuestion, _cardAnswer);
+            saveAllCards();
+            _cardQuestion = "";
+            _cardAnswer = "";
+        }
+    }
     static void saveAllCards() {
         if(!Directory(_pathToData).existsSync()) Directory(_pathToData).create();
         final file = File(_dataPath);
