@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '00_hub_core/menu_system/menu.dart';
 import '00_hub_core/menu_system/welcome_menu.dart';
 import '01_sys/console.dart';
@@ -7,28 +9,89 @@ import 'benchmark.dart';
 
 void main() {
     Console.setConsoleSize(height: Console.heightInit, width: Console.widthInit);
-    SM2UI.mainMenu();
-    //WelcomeMenu.showWelcomeMessage();
-    //Menu.runMenu(menuTypes.main);  
-    //Benchmark().report();
+    //method();
+    //SM2UI.mainMenu();
+   //WelcomeMenu.showWelcomeMessage();
+   //Menu.runMenu(menuTypes.main);  
+   
+    Benchmark().report();
+}
+//  kcs - Kaydjen Computer Saince
+
+
+void method(){
+    //List<String> list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+    List<String> list = ["a", "b", "c", "d", "e", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "x", "y", "z"];
+    String res = "";
+    method1(list,res, 3);
+}
+Set<String> map = {};
+void method1(List<String> list, String res, int maxLen, [int index = 0, int n = 0]){
+    index++;
+    if(index < maxLen){      
+
+        String temp;
+
+        do{
+            temp = list[n];
+            method1(list, res + temp, maxLen, index);
+            n++;
+        }while(n < list.length);
+    }
+    else{
+        for (int i = 0; i < list.length; i++) {
+            String value = res + list[i];
+            if(!map.contains(value)){
+                map.add(value);
+                printt(value);
+            }            
+        }
+    }
+}   
+int indexx = 0;
+void printt(String s){
+    print( /* indexx.toString()+  */" " + s);
+    indexx++;
 }
 
 
 
 
+/* first version. With copies
 
 
+void method(){
+   //List<String> list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+   List<String> list = ["a", "b", "c", "d", "e", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "x", "y", "z"];
+    String res = "";
+    method1(list,res, 3);
+}
 
+void method1(List<String> list, String res, int maxLen, [int index = 0, int n = 0]){
+    index++;
+    if(index < maxLen){      
 
+        String temp;
 
+        do{
+            temp = list[n];
+            method1(list, res + temp, maxLen, index);
+            n++;
+        }while(n < list.length);
+    }
+    else{
+        for (int i = 0; i < list.length; i++) {
+            printt(res + list[i]);
+        }
+    }
+}   
+int indexx = 0;
+void printt(String s){
+    print( /* indexx.toString() + */ " " + s);
+    indexx++;
+}
 
-
-
-
-
-
-
-
+ */
 
 
 

@@ -1,13 +1,44 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
-
+// us. это микросекунды
+//3.1407 микросекунды — 0.00314 миллисекунды - 0.00000314 секунды (то есть 3.14×10⁻⁶ с)
 class Benchmark extends BenchmarkBase {
     Benchmark() : super('Fuck world!');
 
     @override
     void run() {
-
+        Solution.findMedianSortedArrays([1,4], [2,3]);
     } //
 }
+
+
+
+
+/* 
+
+class Solution {
+    static int lengthOfLongestSubstring(String s) {
+        Set<String> map = {s[0]};
+        int lenRes = 1;
+        for (int i = 1; i < s.length; i++) {
+            if(!map.contains(s[i])){
+                map.add(s[i]);
+                int len = map.length;
+                if(len>lenRes){
+                    lenRes = len;
+                }
+            }else{
+                map.clear();
+            }
+        }
+        return lenRes;
+    } // 3.1228813361582186
+}
+
+
+
+
+ */
+
 
 /* 
 class Solution {
@@ -294,6 +325,26 @@ class Solution {
         }      
     }
 } */
+/* 4 new* 
+
+class Solution {
+    static double findMedianSortedArrays(List<int> nums1, List<int> nums2) {
+        for (int i = 0; i < nums2.length; i++) {
+            nums1.add(nums2[i]); // it would be better to create a new list... but who cares
+        }
+        nums1.sort();
+        int len = nums1.length;
+        int index = len~/2;
+        if(len%2==0){
+            return (nums1[index]+nums1[index-1])/2;
+        }else{
+            return nums1[index].toDouble();
+        }
+    }
+} // 1.384609557695221
+
+
+ */
 /* LoL 4
 Не правильно понял задачу и вот с этим кодом я 2к тестов прошел.... лол
 
@@ -309,6 +360,33 @@ class Solution {
 }
 
 
+ */
+/* 3  new*
+class Solution {
+    static int lengthOfLongestSubstring(String s) {
+        Set<String> map = {};
+        int lenRes = 0;
+        int lastIndex = 0;
+        int sLen = s.length;
+        for (int i = 0; i < sLen; i++) {
+            if(!map.contains(s[i])){
+                map.add(s[i]);
+                int len = map.length;
+                if(len>lenRes){
+                    lenRes = len;
+                }
+            }else{
+                map.clear();
+                i = lastIndex;
+                map.add(s[i]);
+                if(i+1 < sLen){
+                    lastIndex = i+1;
+                }
+            }
+        }
+        return lenRes;
+    } // 3.461019654235259 dvdf
+}
  */
 /* 3 (RunTime): 2.39415 us.
 class Solution {
@@ -333,6 +411,55 @@ class Solution {
     }
 } */
 /* 2
+
+class ListNode {
+   int val;
+   ListNode? next;
+   ListNode([this.val = 0, this.next]);
+ }
+
+class Solution {
+    ListNode? addTwoNumbers(ListNode? l1, ListNode? l2) {
+        ListNode res = ListNode();
+        ListNode res1 = res;
+        bool isNull1 = false;
+        bool isNull2 = false;
+        while(true){
+            if(!isNull1){
+                res.val += l1!.val; 
+                l1 = l1.next;
+            }
+            if(!isNull2){
+                res.val += l2!.val; 
+                l2 = l2.next;
+            }
+
+            if(l1 == null){
+                isNull1 = true;
+            }
+            if(l2 == null){
+                isNull2 = true;
+            }
+
+            if(res.val > 9){
+                res.next = ListNode(res.val~/10);
+                res.val %= 10;
+                res = res.next!;
+                if(isNull1 && isNull2) break;
+            }else if(!isNull1 || !isNull2){
+                res.next = ListNode();
+                res = res.next!;
+            }else{
+                break;
+            }
+        }
+        return res1;
+    }
+}
+
+
+*/
+/* 2 old*1 doest work idk why
 class ListNode {
   int val;
   ListNode? next;
@@ -372,10 +499,10 @@ class Solution {
  */
 /* 1
 class Solution {
-    static List<int> twoSum(List<int> nums, int target) {
-        var map = Map<int,int>();
-        for (var i = 0; i < nums.length; i++) {
-            int temp = target-nums[i];
+    Map<int, int> map = {};
+    List<int> twoSum(List<int> nums, int target) {
+        for (int i = 0; i < nums.length; i++) {
+            int temp = target - nums[i];
             if(map.containsKey(temp)){
                 return [map[temp]!, i];
             }
@@ -383,4 +510,5 @@ class Solution {
         }
         return [];
     }
-} */
+}
+*/
