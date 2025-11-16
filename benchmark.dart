@@ -6,9 +6,69 @@ class Benchmark extends BenchmarkBase {
 
     @override
     void run() {
-        Solution.findMedianSortedArrays([1,4], [2,3]);
-    } //
+       //Solution.myAtoi("   -134975384927532498753");
+       int.tryParse("   -134975384927532498753");
+    } // 4.19138
 }
+
+
+
+
+
+
+class Solution {
+    static final Map<String, int> map = {
+        "0": 0,
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9,
+    };
+    static int myAtoi(String s){
+        int i = 0;
+        int res = 0;
+        while(i < s.length && s[i] == " "){
+            i++;
+        }
+        bool isNegative = false;
+        if(i == s.length){
+            return 0;
+        }
+        if(s[i] == "-"){
+            isNegative = true;
+            i++;
+        }else if(s[i] == "+"){
+            i++;
+        }
+        for (; i < s.length; i++) {
+            if(!map.containsKey(s[i])){
+                break;
+            }
+            res *= 10;
+            res += map[s[i]]!;
+            if(res>2147483647){
+                return isNegative ? -2147483648 : 2147483647;
+            }
+        }
+        return isNegative ? -1*res : res;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
