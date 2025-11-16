@@ -157,6 +157,51 @@ class Solution {
     }
 } 
 */
+ */ 
+/* 7 new* 2 took isNegtive lines from old 
+
+class Solution {
+    int reverse(int x) {
+        int res = 0;
+        bool isNegative = x.isNegative;
+        if(isNegative) x *= -1;
+        while(x!=0){
+            res *= 10;
+            res += x%10;
+            x~/=10;
+        }   
+        if(isNegative) res *= -1;
+        if(res > 2147483647 || res < -2147483648) return 0;
+        return res;
+    }
+}
+
+ */
+/* 7 new *  1
+
+class Solution {
+    int reverse(int x) {
+        int res = 0;
+        bool isNegative = false;
+        if(x.isNegative){
+            x*=-1;
+            isNegative = true;
+        }
+        while(x != 0){
+            res *= 10;
+            res += x%10;
+            x~/=10;
+        }
+        if(isNegative){
+            res *= -1;
+        }
+        if(res > 2147483647 || res < -2147483648){
+            return 0;
+        }
+        return res;
+    }
+}
+
  */
 /* 7 runtime -
 class Solution {
