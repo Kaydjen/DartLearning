@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:math';
+
 import 'package:benchmark_harness/benchmark_harness.dart';
 // us. это микросекунды
 //3.1407 микросекунды — 0.00314 миллисекунды - 0.00000314 секунды (то есть 3.14×10⁻⁶ с)
@@ -6,16 +9,176 @@ class Benchmark extends BenchmarkBase {
 
     @override
     void run() {
-       //Solution.myAtoi("   -134975384927532498753");
-       int.tryParse("   -134975384927532498753");
+
     } // 4.19138
 }
 
 
+class Solution {
+    int maxArea(List<int> height) {
+        int left = 0;
+        int right = height.length - 1;
+        int area = 0;
+        while(left < right){
+            int l = height[left];
+            int r = height[right];
+            area = max(min(l, r) * (right-left), area);
+
+            if(l > r){
+                right--;
+            }else{
+                left++;
+            }
+        }
+        return area;
+    }
+}
+
+                /* final int elj = height[j];
+                final int tempRes = (eli > elj) ? (elj * (j-i)) : (eli * (j-i));
+                if(tempRes > res) res = tempRes;  */
+
+/* class Solution {
+    int maxArea(List<int> height) {
+        int len = height.length;
+        int res = 0;
+        for (int i = 0; i < len-1; i++) {
+            int eli = height[i];
+            for (int j = i+1; j < len; j++) {
+                int elj = height[j];
+                int tempRes;
+                if(eli > elj){
+                    tempRes = elj * (j-i);
+                }else{
+                    tempRes = eli * (j-i);
+                }
+                if(tempRes > res) res = tempRes; 
+            }
+        }
+        return res;
+    }
+}
+ */
+
+
+/* beats 100
+class Solution {
+    String longestCommonPrefix(List<String> strs) {
+        int index = 0;
+        String res = "";
+        String symbol = "";
+        String firstStr = strs[0];
+        final int strsLen = strs.length;
+        while(index < firstStr.length){ 
+            symbol = firstStr[index];
+            for (int i = 1; i < strsLen; i++) {
+                String word = strs[i];
+                if(index >= word.length || word[index] != symbol){
+                    return res;
+                }
+            }
+            res += symbol;
+            index++;
+        }
+        return res;
+    }
+} */
+
+
+/* New AI -  1.5962219518890242 us.
+
+class Solution {
+  static const Map<String, int> map = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000
+  };
+  
+  static int romanToInt(String s) {
+    int res = 0;
+    int prev = 0;
+    
+    for (int i = s.length - 1; i >= 0; i--) {
+      int curr = map[s[i]]!;
+      if (curr < prev) {
+        res -= curr;
+      } else {
+        res += curr;
+      }
+      prev = curr;
+    }
+    
+    return res;
+  }
+} */
+
+/* 13 AI variant 2.8607460696269653 us.
+ class Solution1 {
+  static const Map<String, int> map = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000
+  };
+  
+    static int romanToInt(String s) {
+        int res = 0;
+        int sLen = s.length; // this is my line, saved about 0.1 ms
+        for (int i = 0; i < sLen; i++) {
+            int curr = map[s[i]]!;
+            int next = (i + 1 < sLen) ? map[s[i + 1]]! : 0;
+            res += (curr < next) ? -curr : curr;
+        }
+        return res;
+    }
+} */
+/* 13 mine 1.5648247175876413 us.  beats 5-87.82 151-37
+class Solution {
+    static const Map<String, int> map = {
+        "I": 1,
+        "V": 5,
+        "X": 10,
+        "L": 50,
+        "C": 100,
+        "D": 500,
+        "M": 1000
+    };
+    static int romanToInt(String s) {
+        int res = 0;
+        for(int i = s.length-1;  i > -1; i--){
+            final int n1 = map[s[i]]!;
+            if(i==0){
+                res += n1;
+                break;
+            }
+            
+            final int n0 = map[s[i-1]]!;
+            if(n0 < n1){
+                res += n1-n0;
+                i-=1;
+            }else if(i==1){
+                res += n1 + n0;
+                break;
+            }
+            else{
+                res += n1;
+            }
+        }
+        return res;
+    }
+} */
 
 
 
 
+/* 
 class Solution {
     static final Map<String, int> map = {
         "0": 0,
@@ -59,7 +222,7 @@ class Solution {
     }
 }
 
-
+ */
 
 
 
