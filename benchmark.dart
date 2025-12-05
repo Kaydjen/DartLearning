@@ -9,11 +9,14 @@ class Benchmark extends BenchmarkBase {
 
     @override
     void run() {
-
+        
     } // 4.19138
 }
 
 
+
+
+/* 
 class Solution {
     int maxArea(List<int> height) {
         int left = 0;
@@ -32,7 +35,7 @@ class Solution {
         }
         return area;
     }
-}
+} */
 
                 /* final int elj = height[j];
                 final int tempRes = (eli > elj) ? (elj * (j-i)) : (eli * (j-i));

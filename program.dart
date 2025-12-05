@@ -13,16 +13,21 @@ void main() {
     //SM2UI.mainMenu();
    //WelcomeMenu.showWelcomeMessage();
    //Menu.runMenu(menuTypes.main);  
-    Benchmark().report();
+    //Benchmark().report();
+
+
 }
 //  kcs - Kaydjen Computer Saince
 
 
+
+
+    
 void method(){
     //List<String> list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-    List<String> list = ["a", "b", "c", "d", "e", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "x", "y", "z"];
+    List<String> list = ["k", "a", "b", "c", "d", "e", "i", "j", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "x", "y", "z"];
     String res = "";
-    method1(list,res, 3);
+    method1(list,res, 6);
 }
 Set<String> map = {};
 void method1(List<String> list, String res, int maxLen, [int index = 0, int n = 0]){
@@ -49,7 +54,7 @@ void method1(List<String> list, String res, int maxLen, [int index = 0, int n = 
 }   
 int indexx = 0;
 void printt(String s){
-    print( /* indexx.toString()+  */" " + s);
+    stdout.write( /* indexx.toString()+  */" " + s + " | ");
     indexx++;
 }
 
