@@ -13,7 +13,7 @@ void main() {
     //SM2UI.mainMenu();
    //WelcomeMenu.showWelcomeMessage();
    //Menu.runMenu(menuTypes.main);  
-    //Benchmark().report();
+    Benchmark().report();
 
 
 }
