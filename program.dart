@@ -5,25 +5,56 @@ import '00_hub_core/menu_system/welcome_menu.dart';
 import '01_sys/console.dart';
 import '01_sys/prompt_handler.dart';
 import '02_big_complited_projects/flashcards/sm2_ui.dart';
+import '08_learning/callback_3_lvl.dart';
 import 'benchmark.dart';
-
+/* 
 void main() {
     Console.setConsoleSize(height: Console.heightInit, width: Console.widthInit);
     //method();
     //SM2UI.mainMenu();
-   //WelcomeMenu.showWelcomeMessage();
-   //Menu.runMenu(menuTypes.main);  
-   Benchmark().report();
+   // WelcomeMenu.showWelcomeMessage();
+   // Menu.runMenu(menuTypes.main);  
+   //Benchmark().report();
 
-
+    Dawnloader.main();
 }
 //  kcs - Kaydjen Computer Saince
+
+ */
+
+typedef a = int;
+
+void main() {
+  a b = 1;
+  print(b);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
     
-void method(){
+/* void method(){
     //List<String> list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
     List<String> list = ["k", "a", "b", "c", "d", "e", "i", "j", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "x", "y", "z"];
     String res = "";
@@ -57,7 +88,7 @@ void printt(String s){
     stdout.write( /* indexx.toString()+  */" " + s + " | ");
     indexx++;
 }
-
+ */
 
 
 
